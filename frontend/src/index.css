@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-secondaryColor text-textColor;
+    font-family: "Manrope", sans-serif;
+  }
+  section {
+    @apply py-[75px];
+  }
+}
+
+@layer components {
+  .btn {
+    @apply bg-buttonBgColor py-[15px] px-[35px] rounded-[50px] text-white font-[600] mt-[38px] transition-all duration-300 ease-in-out hover:bg-primaryColorHover;
+  }
+
+  .sticky__header {
+    @apply bg-lightTealBg shadow-panelShadow fixed top-0 left-0 w-full z-50 transition-all duration-300;
+  }
+
+  .container {
+    @apply max-w-full w-[1440px] px-[20px] mx-auto;
+  }
+
+  .header {
+    @apply bg-[url('./assets/images/mask.png')] bg-no-repeat bg-cover bg-center w-full h-[100px] leading-[100px];
+  }
+
+  .hero__section {
+    @apply bg-[url('./assets/images/hero-bg.png')] bg-no-repeat bg-cover bg-center;
+  }
+
+  .text__para {
+    @apply text-[18px] leading-[30px] text-textColor font-[400] mt-[18px];
+  }
+
+  .heading {
+    @apply text-[44px] leading-[54px] font-[700] text-headingColor;
+  }
+
+  .form__label {
+    @apply text-textColor text-[16px] leading-7 font-semibold mb-2;
+  }
+
+  .form__input {
+    @apply w-full px-4 py-3 border border-solid border-primaryColor/40 focus:outline-none focus:border-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor rounded-md cursor-pointer;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .container {
+    @apply w-full;
+  }
+  section {
+    padding: 35px 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .heading {
+    @apply text-[26px] leading-[36px];
+  }
+
+  .text__para {
+    @apply text-[16px] leading-[28px] mt-3;
+  }
+}
+
+:root {
+  --toastify-color-success: #4FD1C5;
+  --toastify-icon-color-success: #4FD1C5;
+}
+
+.Toastify__toast--success .Toastify__progress-bar {
+  background: var(--toastify-color-success);
+}
+
+.Toastify__progress-bar--success {
+  background: var(--toastify-color-success);
+}

@@ -1,0 +1,69 @@
+# Node modules (everywhere)
+node_modules/
+**/node_modules/
+
+# Environment files
+.env
+.env.*
+frontend/.env
+backend/.env
+
+# Build outputs
+dist/
+**/dist/
+frontend/dist/
+backend/dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Misc
+*.local
+*.cache
+.cache/
+
+# Test coverage
+coverage/
+**/coverage/
+
+# Production secrets/scripts
+scripts/normalize-doctor-names.js
+
+# Miscellaneous
+frontend/code.txt
+frontend/frontend_files.txt
+
+# Temp files
+.tmp/
+temp/
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.webm
+
+# Zip files
+*.zip
+*.rar
+*.gz
+*.tar
+
