@@ -16,6 +16,7 @@ const SidePanel = ({ ticketPrice, doctorId, doctorName }) => {
   const [errorSlots, setErrorSlots] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [comment, setComment] = useState('');
   // const [fetchedTicketPrice, setFetchedTicketPrice] = useState(null); // If we need to use ticketPrice from slot endpoint
 
   useEffect(() => {
@@ -112,7 +113,8 @@ const SidePanel = ({ ticketPrice, doctorId, doctorName }) => {
           body: JSON.stringify({
             doctorId: doctorId,
             appointmentDate: selectedDate, // "YYYY-MM-DD"
-            appointmentTime: selectedSlot // "HH:mm"
+            appointmentTime: selectedSlot, // "HH:mm"
+            comment: comment
           })
         }
       );
@@ -129,6 +131,7 @@ const SidePanel = ({ ticketPrice, doctorId, doctorName }) => {
         setSelectedSlot(null);
         setAvailableSlots([]); // Clear slots after successful booking
         setErrorSlots(null); // Clear any previous slot errors
+        setComment(''); // Clear comment field
         // Potentially refetch user's appointments or navigate
       } else {
          toast.error(result.message || 'Booking failed. Please try again.');
@@ -198,6 +201,20 @@ const SidePanel = ({ ticketPrice, doctorId, doctorName }) => {
         ) : (
             <p className="text-textColor text-sm py-2">Please select a date to see available slots.</p>
         )}
+      </div>
+
+      <div className="mt-[30px]">
+        <p className="text__para mt-0 font-semibold text-headingColor">
+          Additional Comments (Optional):
+        </p>
+        <textarea
+          rows="3"
+          className="form__input mt-1 w-full"
+          placeholder="Please share any specific concerns or information for the doctor."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          disabled={bookingLoading}
+        ></textarea>
       </div>
 
       {role === 'patient' && authToken && (

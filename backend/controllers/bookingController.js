@@ -10,7 +10,7 @@ const combineDateAndTime = (dateStr, timeStr) => {
 
 export const createBooking = async (req, res) => {
   try {
-    const { doctorId, appointmentDate, appointmentTime } = req.body;
+    const { doctorId, appointmentDate, appointmentTime, comment } = req.body;
     const patientId = req.userId;
 
     if (!doctorId || !appointmentDate || !appointmentTime) {
@@ -38,12 +38,18 @@ export const createBooking = async (req, res) => {
         return res.status(400).json({ success: false, message: "This time slot is already booked or pending confirmation." });
     }
 
-    const newBooking = new Booking({
+    const bookingData = {
       doctor: doctorId,
       user: patientId,
       appointmentDateTime: dateTime,
       status: 'confirmed' // Default status, or consider 'pending' if doctor approval is needed
-    });
+    };
+
+    if (comment) {
+      bookingData.comment = comment;
+    }
+
+    const newBooking = new Booking(bookingData);
 
     await newBooking.save();
 
