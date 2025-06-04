@@ -145,6 +145,13 @@ export const getSingleDoctor = async (req, res) => {
 
   try {
     const doctor = await Doctor.findById(id)
+      .populate({
+        path: 'reviews',
+        populate: {
+          path: 'user',
+          select: 'name photo' // Select only name and photo from the user
+        }
+      })
       .select("-password");
 
     if (!doctor) { 

@@ -14,6 +14,7 @@ import {
   getDoctorAppointments,
 } from "../controllers/doctorController.js";
 import express from "express";
+import reviewRouter from './review.js';
 // import { createReview } from "../controllers/reviewController.js";
 
 const router = express.Router();
@@ -31,5 +32,8 @@ router.get("/:doctorId/available-slots", authenticate, getAvailableSlots);
 router.put("/:id", authenticate, restrict(["doctor"]), updateDoctor);
 router.delete("/:id", authenticate, restrict(["doctor"]), deleteDoctor);
 router.get("/profile/me", authenticate, restrict(["doctor"]), getDoctorProfile);
+
+// Nested route for reviews under a specific doctor
+router.use('/:doctorId/reviews', reviewRouter);
 
 export default router;

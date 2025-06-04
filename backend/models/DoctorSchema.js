@@ -24,6 +24,15 @@ const DoctorSchema = new mongoose.Schema({
     ],
     default: []
   },
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+  averageRating: {
+    type: Number,
+    default: 0,
+  },
+  totalRating: { // Represents the quantity of ratings
+    type: Number,
+    default: 0,
+  },
   experiences: [
     {
       position: { type: String }, // Made optional

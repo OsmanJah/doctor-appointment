@@ -1,11 +1,13 @@
 import { useState } from "react";
 import starIcon from "../../assets/images/Star.png";
 import DoctorAbout from "./DoctorAbout";
+import DoctorFeedback from './DoctorFeedback';
 import SidePanel from "./SidePanel";
 import { BASE_URL } from "../../config";
 import useFetchData from "../../hooks/useFetchData";
 import { useParams } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
+import { AiFillStar } from 'react-icons/ai';
 
 const DoctorDetails = () => {
   const [tab, setTab] = useState("about");
@@ -15,6 +17,7 @@ const DoctorDetails = () => {
     data: doctor,
     loading,
     error,
+    refetch, // Assuming useFetchData returns a refetch function
   } = useFetchData(`${BASE_URL}/doctors/${id}`);
 
   const {
@@ -28,6 +31,9 @@ const DoctorDetails = () => {
     ticketPrice,
     photo,
     _id,
+    reviews, // Assuming reviews are populated by the backend
+    averageRating,
+    totalRating,
   } = doctor;
 
   return (
@@ -66,6 +72,14 @@ const DoctorDetails = () => {
                     <h3 className="text-headingColor text-[22px] leading-[36px] mt-3 font-bold">
                       {name}
                     </h3>
+                    <div className="flex items-center gap-[6px] mt-2 mb-2">
+                      <span className="flex items-center gap-[6px] text-[14px] leading-5 lg:text-[16px] lg:leading-7 font-semibold text-headingColor">
+                        <AiFillStar className="text-yellow-400" /> {averageRating ? averageRating.toFixed(1) : 'N/A'}
+                      </span>
+                      <span className="text-[14px] leading-5 lg:text-[16px] lg:leading-7 font-[400] text-textColor">
+                        ({totalRating || 0})
+                      </span>
+                    </div>
                     <p className="text__para text-[14px] md:text-[15px] leading-6 lg:max-w-[390px]">
                       {bio}
                     </p>
@@ -77,9 +91,15 @@ const DoctorDetails = () => {
                 <div>
                   <button
                     onClick={() => setTab("about")}
-                    className={`${tab === "about" ? "border-b border-solid border-primaryColor" : ""} p-2 mr-5 px-5 text-headingColor font-semibold text-[16px] leading-7`}
+                    className={`${tab === "about" ? "border-b border-solid border-primaryColor text-primaryColor" : "text-headingColor"} p-2 mr-5 px-5 font-semibold text-[16px] leading-7 focus:outline-none`}
                   >
                     About
+                  </button>
+                  <button
+                    onClick={() => setTab("feedback")}
+                    className={`${tab === "feedback" ? "border-b border-solid border-primaryColor text-primaryColor" : "text-headingColor"} p-2 mr-5 px-5 font-semibold text-[16px] leading-7 focus:outline-none`}
+                  >
+                    Feedback
                   </button>
                 </div>
               </div>
@@ -94,6 +114,15 @@ const DoctorDetails = () => {
                       experiences={experiences}
                     />
                   </div>
+                )}
+                {tab === "feedback" && (
+                  <DoctorFeedback 
+                    reviews={reviews} 
+                    totalRating={totalRating} 
+                    averageRating={averageRating} 
+                    doctorId={_id} // Pass the doctor's ID
+                    refetchDoctorData={refetch} // Pass the refetch function
+                  />
                 )}
               </div>
             </div>

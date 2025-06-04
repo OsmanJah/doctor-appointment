@@ -48,8 +48,8 @@ This web application streamlines the healthcare appointment process, allowing pa
 - **React Router**: Navigation and routing
 - **Tailwind CSS**: Styling and responsive design
 - **React Context API**: State management
-- **React Icons**: UI icons
-- **React Toastify**: Notification system
+- **React Icons**: UI icons (e.g., for star ratings)
+- **React Toastify**: User notification system (e.g., for feedback submission status)
 - **Stripe.js**: Payment processing integration
 
 ### Backend
@@ -137,6 +137,8 @@ cd frontend
 2. Install dependencies:
 ```bash
 npm install
+# For the doctor review feature, ensure you have react-icons and react-toastify:
+npm install react-icons react-toastify 
 ```
 
 3. Create a `.env` file in the frontend directory with the following variables:
