@@ -19,6 +19,7 @@ const MyBookings = () => {
 
   const [cancellingId, setCancellingId] = useState(null);
   const { token } = useContext(AuthContext);
+  const [openCommentId, setOpenCommentId] = useState(null);
 
   const handleCancelBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to cancel this appointment?')) {
@@ -95,6 +96,16 @@ const MyBookings = () => {
                 <div className="text-sm text-textColor mb-3 sm:mb-0 sm:mx-4">
                     <p><strong>Date:</strong> {formatDate(booking.appointmentDateTime)}</p>
                     <p><strong>Time:</strong> {new Date(booking.appointmentDateTime).toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                    {booking.comment && (
+                      openCommentId === booking._id ? (
+                        <p className="whitespace-pre-wrap"><strong>Comment:</strong> {booking.comment} <button onClick={() => setOpenCommentId(null)} className="text-primaryColor underline text-xs ml-1">Hide</button></p>
+                      ) : (
+                        <p className="truncate max-w-[220px]" title={booking.comment}>
+                          <strong>Comment:</strong> {booking.comment}
+                          <button onClick={() => setOpenCommentId(booking._id)} className="text-primaryColor underline text-xs ml-1">View</button>
+                        </p>
+                      )
+                    )}
                     <p>
                         <strong>Status:</strong> 
                         <span className={`ml-2 font-medium px-2 py-0.5 rounded-full text-xs 

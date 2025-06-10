@@ -27,6 +27,7 @@ export const updateDoctor = async (req, res) => {
     password,
     qualifications,
     experiences,
+    locations,
   } = req.body;
 
   const updatableFields = {};
@@ -66,6 +67,13 @@ export const updateDoctor = async (req, res) => {
     })).filter(exp => exp.position && exp.hospital && exp.duration); // Basic validation
   }
 
+  // Handle locations update - ensure it's an array of strings
+  if (locations && Array.isArray(locations)) {
+    updatableFields.locations = locations.map(loc => String(loc).trim()).filter(loc => loc !== '');
+  }
+
+  // Handle password update
+
   // Handle password update
   if (password) {
     if (password.trim() === "") {
@@ -73,6 +81,11 @@ export const updateDoctor = async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     updatableFields.password = await bcrypt.hash(password, salt);
+  }
+
+  // DEBUG: Log locations before saving
+  if (updatableFields.locations) {
+    console.log("Attempting to save locations:", updatableFields.locations);
   }
 
   try {
@@ -326,26 +339,35 @@ export const getDoctorProfile = async (req, res) => {
   const userId = req.userId;
 
   try {
-    const user = await Doctor.findById(userId);
+    // Populate the doctor's reviews so they are available on the dashboard
+    const user = await Doctor.findById(userId)
+      .populate({
+        path: 'reviews',
+        populate: {
+          path: 'user',
+          select: 'name photo',
+        },
+      })
+      .select('-password');
 
     if (!user) {
-      // This case should be rare if the token is valid and the doctor exists
       return res.status(404).json({ success: false, message: "Doctor profile not found for the logged-in user." });
     }
 
-    const appointments = await Booking.find({ doctor: userId });
+    // Also load appointments with patient info for completeness
+    const appointments = await Booking.find({ doctor: userId })
+      .populate('user', 'name photo')
+      .sort({ appointmentDateTime: 1 });
 
-    const { password, ...rest } = user._doc;
+    const { password, ...rest } = user._doc; // password already excluded but keep pattern
 
     res.status(200).json({
       success: true,
-      message: "Doctor profile retrieved successfully", 
+      message: "Doctor profile retrieved successfully",
       data: { ...rest, appointments },
     });
   } catch (error) {
-    console.error("Get Doctor Profile Error:", error); 
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to retrieve doctor profile. Please try again." }); 
+    console.error("Get Doctor Profile Error:", error);
+    res.status(500).json({ success: false, message: "Failed to retrieve doctor profile. Please try again." });
   }
 };

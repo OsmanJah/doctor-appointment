@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import { formatDate } from "../../utils/formatDate";
 
 const Appointments = ({ appointments }) => {
+
+  const [openCommentId, setOpenCommentId] = useState(null);
 
   // Check if appointments is null, undefined or not an array
   if (!Array.isArray(appointments)) {
@@ -23,6 +26,9 @@ const Appointments = ({ appointments }) => {
                 Time
               </th>
               <th scope="col" className="px-6 py-3">
+                Comment
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Status
               </th>
             </tr>
@@ -30,7 +36,7 @@ const Appointments = ({ appointments }) => {
           <tbody>
             {appointments.length === 0 ? (
                  <tr>
-                    <td colSpan="4" className="text-center py-5 text-gray-500">
+                    <td colSpan="5" className="text-center py-5 text-gray-500">
                         You have no appointments scheduled.
                     </td>
                 </tr>
@@ -57,6 +63,22 @@ const Appointments = ({ appointments }) => {
                       {new Date(item.appointmentDateTime).toLocaleTimeString("en-US", 
                         { hour: '2-digit', minute: '2-digit', hour12: true }
                       )}
+                    </td>
+
+                    <td className="px-6 py-4 max-w-[250px]">
+                      {item.comment ? (
+                        openCommentId === item._id ? (
+                          <div>
+                            <p className="whitespace-pre-wrap text-gray-700 mb-2">{item.comment}</p>
+                            <button onClick={() => setOpenCommentId(null)} className="text-primaryColor underline text-xs">Hide</button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <span className="truncate max-w-[180px] inline-block" title={item.comment}>{item.comment}</span>
+                            <button onClick={() => setOpenCommentId(item._id)} className="text-primaryColor underline text-xs">View</button>
+                          </div>
+                        )
+                      ) : '—'}
                     </td>
 
                     <td className="px-6 py-4">

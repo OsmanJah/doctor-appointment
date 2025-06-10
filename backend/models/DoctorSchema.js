@@ -33,6 +33,7 @@ const DoctorSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  locations: [{ type: String, trim: true }], // Array of location strings
   experiences: [
     {
       position: { type: String }, // Made optional

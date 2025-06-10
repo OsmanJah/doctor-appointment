@@ -20,6 +20,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
     timeSlots: [],
     qualifications: [],
     experiences: [],
+    locations: [],
   });
   const [newPassword, setNewPassword] = useState("");
 
@@ -39,6 +40,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
           timeSlots: doctorData.timeSlots || [],
           qualifications: doctorData.qualifications || [],
           experiences: doctorData.experiences || [],
+          locations: doctorData.locations || [],
         });
     }
   }, [doctorData]);
@@ -81,6 +83,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
       ...formData,
       qualifications: formData.qualifications.filter(q => q.degree && q.university && q.year),
       experiences: formData.experiences,
+      locations: formData.locations ? formData.locations.map(loc => String(loc).trim()).filter(loc => loc !== '') : [],
       timeSlots: formData.timeSlots.filter(ts => ts.day && ts.startTime && ts.endTime && ts.slotDurationMinutes > 0),
     };
     if (newPassword && newPassword.trim() !== "") {
@@ -195,6 +198,28 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
   const deleteExperience = (e, index) => {
     e.preventDefault();
     deleteItem("experiences", index);
+  };
+
+  const addLocation = (e) => {
+    e.preventDefault();
+    addItem("locations", ""); // Add an empty string for a new location
+  };
+
+  const handleLocationChange = (event, index) => {
+    const { value } = event.target;
+    setFormData(prevFormData => {
+      const updatedLocations = [...(prevFormData.locations || [])];
+      updatedLocations[index] = value;
+      return {
+        ...prevFormData,
+        locations: updatedLocations,
+      };
+    });
+  };
+
+  const deleteLocation = (e, index) => {
+    e.preventDefault();
+    deleteItem("locations", index);
   };
 
   return (
@@ -479,6 +504,38 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
             Add Experience
           </button>
         </div>
+
+        {/* =============== locations form =============== */}
+        <div className="mb-5 border-t pt-5 mt-5">
+          <p className="form__label">Practice Locations</p>
+          {formData.locations?.map((item, index) => (
+            <div key={index} className="mb-3">
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  name={`location-${index}`}
+                  value={item}
+                  onChange={e => handleLocationChange(e, index)}
+                  placeholder="E.g., Nagyerdei krt. 98, Debrecen OR Kenézy Gyula Kórház, Debrecen"
+                  className="form__input flex-1"
+                />
+                <button 
+                  onClick={e => deleteLocation(e, index)} 
+                  className="text-red-600 hover:text-red-800 transition-colors duration-200 p-2 ml-2 rounded-full hover:bg-red-100"
+                >
+                  <AiOutlineDelete size={22} />
+                </button>
+              </div>
+            </div>
+          ))}
+          <button 
+            onClick={addLocation} 
+            className="bg-primaryColor hover:bg-primaryColorHover text-white font-semibold py-2 px-4 rounded text-sm"
+          >
+            Add Location
+          </button>
+        </div>
+
         <div className="mb-5 border-t pt-5 mt-5">
           <p className="form__label">About</p>
           <textarea

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'; // For displaying success/error messages
 import { formatDate } from '../../utils/formatDate';
 import { AiFillStar } from 'react-icons/ai';
 
-const DoctorFeedback = ({ reviews, totalRating, averageRating, doctorId, refetchDoctorData }) => {
+const DoctorFeedback = ({ reviews, totalRating, averageRating, doctorId, refetchDoctorData, canGiveFeedback = true }) => {
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -96,7 +96,7 @@ const DoctorFeedback = ({ reviews, totalRating, averageRating, doctorId, refetch
       </div>
 
       {/* TODO: Feedback Form will go here */}
-      {!showFeedbackForm && (
+      {canGiveFeedback && !showFeedbackForm && (
         <div className="text-center">
           <button className="btn" onClick={() => setShowFeedbackForm(true)}>
             Give Feedback
@@ -104,7 +104,7 @@ const DoctorFeedback = ({ reviews, totalRating, averageRating, doctorId, refetch
         </div>
       )}
 
-      {showFeedbackForm && (
+      {canGiveFeedback && showFeedbackForm && (
         <div className="mt-8">
           <form onSubmit={handleSubmitFeedback}>
             <div>

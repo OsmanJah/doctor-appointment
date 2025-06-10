@@ -34,7 +34,14 @@ const DoctorDetails = () => {
     reviews, // Assuming reviews are populated by the backend
     averageRating,
     totalRating,
+    locations,
   } = doctor;
+
+  // DEBUG: Log fetched doctor data and locations
+  if (doctor && Object.keys(doctor).length > 0) {
+    console.log("DoctorDetails.jsx - Fetched doctor data:", doctor);
+    console.log("DoctorDetails.jsx - Fetched locations:", locations);
+  }
 
   return (
     <section>
@@ -83,11 +90,23 @@ const DoctorDetails = () => {
                     <p className="text__para text-[14px] md:text-[15px] leading-6 lg:max-w-[390px]">
                       {bio}
                     </p>
+                    {/* Log before conditional rendering of locations */}
+                    {console.log('JSX RENDER - doctor.locations:', doctor.locations, 'Destructured locations:', locations)}
+                    {locations && locations.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text__para text-[14px] md:text-[15px] leading-6 font-semibold text-primaryColor">
+                          Location:&nbsp;
+                          <span className="text-textColor font-normal">
+                            {locations.join(', ')}
+                          </span>
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="mt-[50px] border-b border-solid border-[#0066ff34]">
+              <div className="mt-[70px] border-b border-solid border-[#0066ff34]">
                 <div>
                   <button
                     onClick={() => setTab("about")}

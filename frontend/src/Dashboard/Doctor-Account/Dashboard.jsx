@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import Tabs from "./Tabs";
 import HashLoader from "react-spinners/HashLoader";
 import Appointments from "./Appointments";
+import DoctorFeedback from "../../pages/Doctors/DoctorFeedback";
 
 const Dashboard = () => {
   const [tab, setTab] = useState("overview");
@@ -63,6 +64,12 @@ const Dashboard = () => {
                         <p className="text__para text-[15px] leading-6 lg:max-w-[390px]">
                           {doctorData?.bio}
                         </p>
+                        {doctorData?.locations?.length > 0 && (
+                          <p className="text__para text-[15px] leading-6 lg:max-w-[390px] mt-2">
+                            <span className="font-semibold text-primaryColor">Location:&nbsp;</span>
+                            {doctorData.locations.join(', ')}
+                          </p>
+                        )}
                       </div>
                     </div>
                     
@@ -75,6 +82,20 @@ const Dashboard = () => {
                         experiences={doctorData?.experiences}
                       />
                     </div>
+
+                    {/* Reviews Section */}
+                    {doctorData?.reviews && (
+                      <div className="mt-10 pt-5 border-t border-solid border-[#0066ff1a]">
+                        <DoctorFeedback
+                          reviews={doctorData.reviews}
+                          totalRating={doctorData.totalRating}
+                          averageRating={doctorData.averageRating}
+                          doctorId={doctorData._id}
+                          refetchDoctorData={refetchDoctorProfile}
+                          canGiveFeedback={false}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
                 {tab === "settings" && <Profile doctorData={doctorData} refetchDoctorData={refetchDoctorProfile} />}
