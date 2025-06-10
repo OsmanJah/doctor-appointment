@@ -6,6 +6,8 @@ const BookingSchema = new mongoose.Schema(
     user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
     appointmentDateTime: { type: Date, required: true },
     comment: { type: String, required: false },
+    prescription: { type: String }, // URL or text of prescription document
+    doctorNotes: { type: String },  // Additional notes visible to patient
     status: {
       type: String,
       enum: ["pending", "confirmed", "cancelled", "completed"],

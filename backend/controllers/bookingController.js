@@ -2,7 +2,8 @@ import Booking from "../models/BookingSchema.js";
 import Doctor from "../models/DoctorSchema.js";
 import User from "../models/UserSchema.js";
 
-import { sendConfirmationEmail } from '../utils/email.js';
+import { sendConfirmationEmail, sendDoctorNotificationEmail } from '../utils/email.js';
+import { getIO } from '../socket.js';
 const combineDateAndTime = (dateStr, timeStr) => {
   return new Date(`${dateStr}T${timeStr}:00`);
 };
@@ -66,9 +67,29 @@ export const createBooking = async (req, res) => {
           appointmentDate,
           appointmentTime
         );
+
+        // Notify doctor as well
+        await sendDoctorNotificationEmail(
+          doctor.email,
+          patient.name,
+          appointmentDate,
+          appointmentTime
+        );
+
+        // Emit real-time event
+        try {
+          const io = getIO();
+          io.to(doctorId.toString()).emit('newBooking', {
+            patientName: patient.name,
+            date: appointmentDate,
+            time: appointmentTime,
+          });
+        } catch (socketErr) {
+          console.error('Socket emit failed:', socketErr.message);
+        }
       }
     } catch (err) {
-      console.error('Failed to send confirmation email:', err);
+      console.error('Failed to send email notifications:', err);
     }
 
     res.status(201).json({ 
@@ -172,3 +193,42 @@ export const updateBookingStatus = async (req, res) => {
   }
 };
 
+// New: Update prescription or doctor notes
+export const addPrescriptionOrNotes = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const { prescription, doctorNotes } = req.body;
+    const loggedInUserId = req.userId;
+    const loggedInUserRole = req.role;
+
+    if (!prescription && !doctorNotes) {
+      return res.status(400).json({ success: false, message: "Nothing to update. Provide prescription or doctorNotes." });
+    }
+
+    // Only doctors (or admin) can add/edit prescription/notes
+    if (loggedInUserRole !== 'doctor' && loggedInUserRole !== 'admin') {
+      return res.status(403).json({ success: false, message: "You are not authorized to perform this action." });
+    }
+
+    const booking = await Booking.findById(bookingId).populate('doctor', 'id name');
+    if (!booking) {
+      return res.status(404).json({ success: false, message: "Booking not found." });
+    }
+
+    if (loggedInUserRole === 'doctor' && booking.doctor._id.toString() !== loggedInUserId) {
+      return res.status(403).json({ success: false, message: "You can only update your own appointments." });
+    }
+
+    if (prescription !== undefined) booking.prescription = prescription;
+    if (doctorNotes !== undefined) booking.doctorNotes = doctorNotes;
+
+    const updatedBooking = await booking.save();
+
+    // TODO: Email patient that prescription is available
+
+    res.status(200).json({ success: true, message: "Booking updated successfully", data: updatedBooking });
+  } catch (error) {
+    console.error("Error adding prescription/notes:", error);
+    res.status(500).json({ success: false, message: "Failed to update booking." });
+  }
+};

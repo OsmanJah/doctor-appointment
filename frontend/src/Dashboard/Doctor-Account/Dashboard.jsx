@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 // import doctorImg from "../../assets/images/doctor-img02.png";
 import starIcon from "../../assets/images/Star.png";
 import DoctorAbout from "../../pages/Doctors/DoctorAbout";
@@ -9,22 +9,40 @@ import Tabs from "./Tabs";
 import HashLoader from "react-spinners/HashLoader";
 import Appointments from "./Appointments";
 import DoctorFeedback from "../../pages/Doctors/DoctorFeedback";
+import { AuthContext } from "../../context/AuthContext.jsx";
+import { io } from "socket.io-client";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [tab, setTab] = useState("overview");
-  
+  const { role } = useContext(AuthContext);
+
   // Fetch Doctor Profile Data
   const { data: doctorData, loading: loadingProfile, error: errorProfile, refetch: refetchDoctorProfile } = 
     useFetchData(`${BASE_URL}/doctors/profile/me`);
 
-  // Fetch Doctor Appointments Data - Remove refetch destructuring
-  const { data: appointmentData, loading: loadingAppointments, error: errorAppointments } = 
+  // Fetch Doctor Appointments Data
+  const { data: appointmentData, loading: loadingAppointments, error: errorAppointments, refetch: refetchAppointments } = 
     useFetchData(`${BASE_URL}/doctors/profile/appointments`);
 
   // Combine loading states
   const loading = loadingProfile || loadingAppointments;
   // Combine or prioritize errors if necessary
   const error = errorProfile || errorAppointments;
+
+  // --- Socket.IO for real-time notifications ---
+  useEffect(() => {
+    if (role === 'doctor' && doctorData?._id) {
+      const socketUrl = BASE_URL.replace(/\/api.*/, '');
+      const socket = io(socketUrl, { transports: ['websocket'], withCredentials: true });
+      socket.emit('join', { doctorId: doctorData._id });
+      socket.on('newBooking', (payload) => {
+        toast.info(`New booking from ${payload.patientName} on ${payload.date} at ${payload.time}`);
+        if (refetchAppointments) refetchAppointments();
+      });
+      return () => socket.disconnect();
+    }
+  }, [role, doctorData]);
 
   return (
     <section>
@@ -102,6 +120,7 @@ const Dashboard = () => {
                 {tab === "appointments" && (
                   <Appointments 
                     appointments={appointmentData} 
+                    refetchAppointments={refetchAppointments}
                   />
                 )}
               </div>

@@ -174,3 +174,33 @@ export async function sendConfirmationEmail(to, firstName, doctorName, date, tim
     throw error; // Re-throw to allow caller to handle
   }
 }
+
+// Notify doctor of a new booking
+export async function sendDoctorNotificationEmail(to, patientName, date, time) {
+  if (!to) {
+    console.error('Cannot send email: doctor recipient address is missing');
+    throw new Error('Doctor email address is required');
+  }
+  try {
+    const transporter = getTransporter();
+    const from = process.env.MAIL_FROM || 'MarieCare <no-reply@mariecare.com>';
+    const subject = 'New Appointment Booked';
+    const text = `A new appointment has been booked by ${patientName} on ${date} at ${time}.`;
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #4FD1C5;">New Appointment Booking</h2>
+        <p>Dear Doctor,</p>
+        <p>Patient <strong>${patientName}</strong> has booked an appointment.</p>
+        <p><strong>Date:</strong> ${date}<br><strong>Time:</strong> ${time}</p>
+        <p>Please log in to your dashboard for details.</p>
+        <p>Best regards,<br>The MarieCare Team</p>
+      </div>`;
+    const mailOptions = { from, to, subject, text, html };
+    const info = await transporter.sendMail(mailOptions);
+    console.log('✓ Doctor notification email sent:', info.messageId);
+    return info;
+  } catch (error) {
+    console.error('✗ Failed to send doctor notification email:', error.message);
+    throw error;
+  }
+}

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useState, useContext } from 'react';
 import { AuthContext } from "../../context/AuthContext";
 
+const COLLAPSE_LIMIT = 60;
 
 const formatDate = (date) => {
   return new Date(date).toLocaleDateString("en-US", { 
@@ -20,6 +21,7 @@ const MyBookings = () => {
   const [cancellingId, setCancellingId] = useState(null);
   const { token } = useContext(AuthContext);
   const [openCommentId, setOpenCommentId] = useState(null);
+  const [openPrescriptionId, setOpenPrescriptionId] = useState(null);
 
   const handleCancelBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to cancel this appointment?')) {
@@ -78,7 +80,7 @@ const MyBookings = () => {
         bookings && bookings.length > 0 ? (
           <div className="grid grid-cols-1 gap-5">
             {bookings?.map(booking => (
-              <div key={booking._id} className="p-4 border rounded-md shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center">
+              <div key={booking._id} className="p-4 border rounded-md shadow-sm flex flex-col sm:flex-row sm:gap-6 items-start">
 
                 <div className="flex items-center mb-3 sm:mb-0">
                     <img 
@@ -88,21 +90,31 @@ const MyBookings = () => {
                     />
                     <div>
                         <h3 className="text-lg font-semibold text-headingColor">{booking.doctor?.name || 'Doctor Name N/A'}</h3>
-                        <p className="text-sm text-textColor">{booking.doctor?.specialization || 'Specialization N/A'}</p>
+                        <p className="text-sm text-textColor whitespace-nowrap">{booking.doctor?.specialization || 'Specialization N/A'}</p>
                     </div>
                 </div>
                 
 
-                <div className="text-sm text-textColor mb-3 sm:mb-0 sm:mx-4">
+                <div className="text-sm text-textColor mb-3 sm:mb-0 sm:flex-1">
                     <p><strong>Date:</strong> {formatDate(booking.appointmentDateTime)}</p>
                     <p><strong>Time:</strong> {new Date(booking.appointmentDateTime).toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
                     {booking.comment && (
                       openCommentId === booking._id ? (
                         <p className="whitespace-pre-wrap"><strong>Comment:</strong> {booking.comment} <button onClick={() => setOpenCommentId(null)} className="text-primaryColor underline text-xs ml-1">Hide</button></p>
                       ) : (
-                        <p className="truncate max-w-[220px]" title={booking.comment}>
-                          <strong>Comment:</strong> {booking.comment}
+                        <p className="" title={booking.comment}>
+                          <strong>Comment:</strong> {booking.comment.length > COLLAPSE_LIMIT ? booking.comment.slice(0, COLLAPSE_LIMIT) + '...' : booking.comment}
                           <button onClick={() => setOpenCommentId(booking._id)} className="text-primaryColor underline text-xs ml-1">View</button>
+                        </p>
+                      )
+                    )}
+                    {booking.doctorNotes && (
+                      openPrescriptionId === booking._id ? (
+                        <p className="whitespace-pre-wrap"><strong>Prescription:</strong> {booking.doctorNotes} <button onClick={() => setOpenPrescriptionId(null)} className="text-primaryColor underline text-xs ml-1">Hide</button></p>
+                      ) : (
+                        <p className="" title={booking.doctorNotes}>
+                          <strong>Prescription:</strong> {booking.doctorNotes.length > COLLAPSE_LIMIT ? booking.doctorNotes.slice(0, COLLAPSE_LIMIT) + '...' : booking.doctorNotes}
+                          <button onClick={() => setOpenPrescriptionId(booking._id)} className="text-primaryColor underline text-xs ml-1">View</button>
                         </p>
                       )
                     )}

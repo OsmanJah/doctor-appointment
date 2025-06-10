@@ -1,102 +1,150 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { formatDate } from "../../utils/formatDate";
+import PrescriptionModal from "./PrescriptionModal";
+import { AuthContext } from "../../context/AuthContext.jsx";
+import { BASE_URL } from "../../config";
+import { toast } from "react-toastify";
 
-const Appointments = ({ appointments }) => {
+const COLLAPSE_LIMIT = 60;
+
+const Appointments = ({ appointments, refetchAppointments }) => {
 
   const [openCommentId, setOpenCommentId] = useState(null);
+  const { token, role } = useContext(AuthContext);
+  const [loadingId, setLoadingId] = useState(null); // Track which booking is updating
+  const [modalBooking, setModalBooking] = useState(null); // For prescription modal
+
+  const updateStatus = async (bookingId, newStatus) => {
+    if (!token) {
+      toast.error("You are not authenticated");
+      return;
+    }
+    try {
+      setLoadingId(bookingId);
+      const res = await fetch(`${BASE_URL}/bookings/${bookingId}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.message || "Failed to update status");
+      }
+      toast.success(result.message || "Status updated");
+      if (refetchAppointments) refetchAppointments();
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Error updating status");
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   // Check if appointments is null, undefined or not an array
   if (!Array.isArray(appointments)) {
       return <p className="text-center py-5 text-gray-500">Loading appointments or no appointments found.</p>;
   }
 
+  // Allowed status transitions for doctor
+  const doctorNextStatuses = (current) => {
+    switch (current) {
+      case 'pending':
+        return ['confirmed', 'completed', 'cancelled'];
+      case 'confirmed':
+        return ['completed', 'cancelled'];
+      default:
+        return [];
+    }
+  };
+
   return (
-    <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left text-gray-500 ">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-100 ">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Patient Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Appointment Date
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Time
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Comment
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.length === 0 ? (
-                 <tr>
-                    <td colSpan="5" className="text-center py-5 text-gray-500">
-                        You have no appointments scheduled.
-                    </td>
-                </tr>
-            ) : (
-                appointments.map(item => (
-                  <tr key={item._id} className="bg-white border-b hover:bg-gray-50 ">
+    <div>
+      <h2 className="text-headingColor text-[24px] font-bold mb-6">My appointments</h2>
+      {appointments.length === 0 ? (
+        <p className="text-center py-5 text-gray-500">You have no appointments scheduled.</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-5">
+          {appointments.map(item => (
+            <div key={item._id} className="p-4 border rounded-md shadow-sm flex flex-col sm:flex-row sm:gap-6 items-start sm:items-start">
 
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                          <img
-                            className="w-10 h-10 rounded-full object-cover mr-3"
-                            src={item.user?.photo || '/default-avatar.png'}
-                            alt={item.user?.name || 'Patient'}
-                          />
-                          <div className="pl-1">
-                            <div className="text-base font-semibold text-gray-900">{item.user?.name || 'N/A'}</div>
-                          </div>
-                      </div>
-                    </td>
+              {/* Patient info */}
+              <div className="flex items-center mb-3 sm:mb-0">
+                <img src={item.user?.photo || '/default-avatar.png'} alt={item.user?.name || 'Patient'} className="w-12 h-12 rounded-full mr-3 object-cover" />
+                <div>
+                  <h3 className="text-lg font-semibold text-headingColor">{item.user?.name || 'Patient'}</h3>
+                </div>
+              </div>
 
-                    <td className="px-6 py-4">{formatDate(item.appointmentDateTime)}</td>
+              {/* Booking details */}
+              <div className="text-sm text-textColor mb-3 sm:mb-0 sm:mx-4 sm:flex-1">
+                <p><strong>Date:</strong> {formatDate(item.appointmentDateTime)}</p>
+                <p><strong>Time:</strong> {new Date(item.appointmentDateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
 
-                    <td className="px-6 py-4">
-                      {new Date(item.appointmentDateTime).toLocaleTimeString("en-US", 
-                        { hour: '2-digit', minute: '2-digit', hour12: true }
-                      )}
-                    </td>
+                {item.comment && (
+                  openCommentId === item._id ? (
+                    <p className="whitespace-pre-wrap"><strong>Comment:</strong> {item.comment} <button onClick={() => setOpenCommentId(null)} className="text-primaryColor underline text-xs ml-1">Hide</button></p>
+                  ) : (
+                    <p title={item.comment}>
+                      <strong>Comment:</strong> {item.comment.length > COLLAPSE_LIMIT ? item.comment.slice(0, COLLAPSE_LIMIT) + '...' : item.comment}
+                      <button onClick={() => setOpenCommentId(item._id)} className="text-primaryColor underline text-xs ml-1">View</button>
+                    </p>
+                  )
+                )}
 
-                    <td className="px-6 py-4 max-w-[250px]">
-                      {item.comment ? (
-                        openCommentId === item._id ? (
-                          <div>
-                            <p className="whitespace-pre-wrap text-gray-700 mb-2">{item.comment}</p>
-                            <button onClick={() => setOpenCommentId(null)} className="text-primaryColor underline text-xs">Hide</button>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2">
-                            <span className="truncate max-w-[180px] inline-block" title={item.comment}>{item.comment}</span>
-                            <button onClick={() => setOpenCommentId(item._id)} className="text-primaryColor underline text-xs">View</button>
-                          </div>
-                        )
-                      ) : '—'}
-                    </td>
+                <p className="mt-1">
+                  <strong>Status:</strong>{' '}
+                  {role === 'doctor' && doctorNextStatuses(item.status).length > 0 ? (
+                    <select
+                      className={`border rounded px-2 py-1 text-xs 
+                        ${item.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
+                          item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
+                          item.status === 'cancelled' ? 'bg-red-100 text-red-700' : 
+                          item.status === 'completed' ? 'bg-gray-100 text-gray-700' : ''}`}
+                      value={item.status}
+                      disabled={loadingId === item._id}
+                      onChange={(e) => updateStatus(item._id, e.target.value)}
+                    >
+                      <option value={item.status} disabled>{item.status.charAt(0).toUpperCase() + item.status.slice(1)}</option>
+                      {doctorNextStatuses(item.status).map(opt => (
+                        <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span className={`ml-2 font-medium px-2 py-0.5 rounded-full text-xs 
+                        ${item.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
+                          item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
+                          item.status === 'cancelled' ? 'bg-red-100 text-red-700' : 
+                          'bg-gray-100 text-gray-700'}`}>{item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                  )}
+                </p>
+              </div>
 
-                    <td className="px-6 py-4">
-                      <span className={`font-medium px-2 py-1 rounded-full text-xs 
-                            ${item.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
-                              item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
-                              item.status === 'cancelled' ? 'bg-red-100 text-red-700' : 
-                              item.status === 'completed' ? 'bg-blue-100 text-blue-700' : 
-                              'bg-gray-100 text-gray-700'}
-                      `}>
-                           {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-            )}
-          </tbody>
-        </table>
+              {/* Actions */}
+              {role === 'doctor' && (
+                <div className="w-full sm:w-auto">
+                  <button onClick={() => setModalBooking(item)} className="text-primaryColor underline text-sm">Add Prescription</button>
+                </div>
+              )}
+
+            </div>
+          ))}
+        </div>
+      )}
+
+      {modalBooking && (
+        <PrescriptionModal
+          booking={modalBooking}
+          onClose={() => setModalBooking(null)}
+          onSaved={() => {
+            setModalBooking(null);
+            if (refetchAppointments) refetchAppointments();
+          }}
+        />
+      )}
     </div>
   );
 };

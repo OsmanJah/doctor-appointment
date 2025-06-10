@@ -5,6 +5,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
+import { createServer } from 'http';
+import { initSocket } from './socket.js';
 
 import authRoute     from "./routes/auth.js";
 import userRoute     from "./routes/user.js";
@@ -41,7 +43,11 @@ const connectDB = async () => {
   }
 };
 
-app.listen(port, () => {
+// Create HTTP server to attach socket.io
+const httpServer = createServer(app);
+initSocket(httpServer);
+
+httpServer.listen(port, () => {
   connectDB();
   console.log(`Server is running on port ${port}`);
 });

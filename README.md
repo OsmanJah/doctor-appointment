@@ -39,7 +39,14 @@ This web application streamlines the healthcare appointment process, allowing pa
 - **Appointment Overview**: View upcoming and past appointments
 - **Patient Information**: Access basic information about patients with appointments
 
-
+### Recent Enhancements (June 2025)
+- **Booking status workflow (doctor)** – Pending ➜ Confirmed/Completed/Cancelled with coloured status pills.
+- **Prescription module** – Doctors can add prescription text; patients see it in their bookings.
+- **Real-time in-app notifications** – Socket.IO server/client set-up, doctors receive instant toast on new booking.
+- **Collapsible long text** – Comments & prescriptions now toggle View/Hide on both dashboards.
+- **Unified appointment cards** – Doctor dashboard now uses the same styled card layout as patient dashboard for UI consistency.
+- **UI color parity** – Doctor and patient dashboards now share identical colors, spacing, and status-pill palette.
+- **Dashboard headings** – Added “My appointments” heading to the doctor dashboard for clarity.
 
 ## Technology Stack
 
@@ -51,6 +58,7 @@ This web application streamlines the healthcare appointment process, allowing pa
 - **React Icons**: UI icons (e.g., for star ratings)
 - **React Toastify**: User notification system (e.g., for feedback submission status)
 - **Stripe.js**: Payment processing integration
+- **Socket.IO Client**: Real-time client-side communication
 
 ### Backend
 - **Node.js**: JavaScript runtime
@@ -62,6 +70,7 @@ This web application streamlines the healthcare appointment process, allowing pa
 - **Nodemailer**: Email sending functionality
 - **Stripe API**: Payment processing
 - **Cloudinary**: Image storage and management
+- **Socket.IO**: Real-time server-side communication
 
 ## Prerequisites
 
@@ -91,6 +100,7 @@ cd backend
 2. Install dependencies:
 ```bash
 npm install
+npm install socket.io
 ```
 
 3. Create a `.env` file in the backend directory with the following variables (adjust values as needed):
@@ -137,6 +147,7 @@ cd frontend
 2. Install dependencies:
 ```bash
 npm install
+npm install socket.io-client
 # For the doctor review feature, ensure you have react-icons and react-toastify:
 npm install react-icons react-toastify 
 ```
@@ -262,3 +273,5 @@ To create a doctor account:
    - Verify API base URL is set correctly in frontend
 
 For additional assistance, please contact the repository maintainer.
+
+_Last updated: June 10 2025_
