@@ -1,21 +1,5 @@
 // backend/index.js
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
-import dotenv from 'dotenv';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
-const envPath    = path.join(__dirname, '.env');
-
-// Load .env once
-if (fs.existsSync(envPath)) {
-  dotenv.config({ path: envPath, override: true });
-} else {
-}
-
-// Only one log, after loading .env
-console.log('MAIL_HOST is', process.env.MAIL_HOST);
+import 'dotenv/config';
 
 import express from "express";
 import cookieParser from "cookie-parser";
