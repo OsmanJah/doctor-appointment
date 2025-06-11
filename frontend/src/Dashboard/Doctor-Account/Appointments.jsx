@@ -61,14 +61,18 @@ const Appointments = ({ appointments, refetchAppointments }) => {
     }
   };
 
+  const sortedAppointments = Array.isArray(appointments)
+    ? [...appointments].sort((a, b) => new Date(b.appointmentDateTime) - new Date(a.appointmentDateTime))
+    : [];
+
   return (
     <div>
       <h2 className="text-headingColor text-[24px] font-bold mb-6">My appointments</h2>
-      {appointments.length === 0 ? (
+      {sortedAppointments.length === 0 ? (
         <p className="text-center py-5 text-gray-500">You have no appointments scheduled.</p>
       ) : (
         <div className="grid grid-cols-1 gap-5">
-          {appointments.map(item => (
+          {sortedAppointments.map(item => (
             <div key={item._id} className="p-4 border rounded-md shadow-sm flex flex-col sm:flex-row sm:gap-6 items-start sm:items-start">
 
               {/* Patient info */}
