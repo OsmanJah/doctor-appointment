@@ -52,6 +52,32 @@ const Tabs = ({ tab, setTab }) => {
         </button>
 
         <button
+          onClick={() => setTab("calendar")}
+          className={`
+            w-full btn rounded-md mt-0 
+            ${tab === "calendar"
+              ? "bg-primaryColor text-white"
+              : "bg-transparent text-headingColor border border-primaryColor hover:bg-primaryColorHover hover:text-white transition-all duration-300"
+            }
+          `}
+        >
+          Calendar
+        </button>
+
+        <button
+          onClick={() => setTab("analytics")}
+          className={`
+            w-full btn rounded-md mt-0 
+            ${tab === "analytics"
+              ? "bg-primaryColor text-white"
+              : "bg-transparent text-headingColor border border-primaryColor hover:bg-primaryColorHover hover:text-white transition-all duration-300"
+            }
+          `}
+        >
+          Analytics
+        </button>
+
+        <button
           onClick={() => setTab("settings")}
           className={`
             w-full btn rounded-md mt-0 

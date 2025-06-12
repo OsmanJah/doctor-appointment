@@ -12,6 +12,8 @@ import DoctorFeedback from "../../pages/Doctors/DoctorFeedback";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { io } from "socket.io-client";
 import { toast } from "react-toastify";
+import DoctorCalendar from "./DoctorCalendar";
+import DoctorAnalytics from "./DoctorAnalytics";
 
 const Dashboard = () => {
   const [tab, setTab] = useState("overview");
@@ -122,6 +124,12 @@ const Dashboard = () => {
                     appointments={appointmentData} 
                     refetchAppointments={refetchAppointments}
                   />
+                )}
+                {tab === "calendar" && (
+                  <DoctorCalendar appointments={appointmentData} />
+                )}
+                {tab === "analytics" && (
+                  <DoctorAnalytics appointments={appointmentData} />
                 )}
               </div>
             </div>
