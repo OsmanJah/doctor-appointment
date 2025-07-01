@@ -74,7 +74,7 @@ const Tabs = ({ tab, setTab }) => {
             }
           `}
         >
-          Analytics
+          Booking Analytics
         </button>
 
         <button

@@ -81,3 +81,28 @@
 .Toastify__progress-bar--success {
   background: var(--toastify-color-success);
 }
+
+/* Doctor dark calendar overrides */
+.doctor-dark-calendar {
+  --cl-background: #1f1f1f;
+  --cl-text: #e5e5e5;
+  --cl-border: #333;
+  background-color: var(--cl-background) !important;
+  color: var(--cl-text) !important;
+  border-radius: 8px;
+}
+.doctor-dark-calendar button {
+  background: transparent;
+  color: var(--cl-text);
+}
+.doctor-dark-calendar .react-calendar__tile--active {
+  background: #4FD1C5 !important;
+  color: #fff !important;
+}
+.doctor-dark-calendar abbr[title] {
+  text-decoration: none;
+}
+.doctor-dark-calendar .react-calendar__tile:hover, .doctor-dark-calendar .react-calendar__tile:focus {
+  background: #ffffff !important; /* white */
+  color: #000000 !important;      /* black for contrast */
+}

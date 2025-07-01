@@ -26,7 +26,7 @@ const DoctorAnalytics = ({ appointments = [] }) => {
 
   return (
     <div>
-      <h2 className="text-headingColor text-[24px] font-bold mb-6">Analytics</h2>
+      <h2 className="text-headingColor text-[24px] font-bold mb-6">Booking Analytics</h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <StatCard label="Total" value={stats.total} bg="bg-gray-100" text="text-gray-700" />
         <StatCard label="Upcoming" value={stats.upcoming} bg="bg-yellow-100" text="text-yellow-700" />

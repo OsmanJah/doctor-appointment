@@ -37,7 +37,12 @@ const DoctorCalendar = ({ appointments = [] }) => {
   return (
     <div>
       <h2 className="text-headingColor text-[24px] font-bold mb-6">Calendar</h2>
-      <Calendar value={selectedDate} onClickDay={setSelectedDate} tileContent={tileContent} className="react-calendar border-none shadow-panelShadow" />
+      <Calendar
+        value={selectedDate}
+        onClickDay={setSelectedDate}
+        tileContent={tileContent}
+        className="react-calendar border-none shadow-panelShadow doctor-dark-calendar"
+      />
 
       {selectedDate && (
         <div className="mt-6">

@@ -1,9 +1,11 @@
 import { useEffect, useState, useCallback, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 // import { token as staticToken } from "../config";
 import { AuthContext } from "../context/AuthContext.jsx";
 
 const useFetchData = url => {
-  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { token, dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -18,6 +20,13 @@ const useFetchData = url => {
       }
 
       const res = await fetch(url, { headers });
+
+      // If token expired or unauthorized, force logout and redirect
+      if (res.status === 401 || res.status === 403) {
+        dispatch({ type: "LOGOUT" });
+        navigate("/login", { replace: true });
+        return; // halt further processing
+      }
 
       const result = await res.json();
 
