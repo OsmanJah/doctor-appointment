@@ -23,9 +23,16 @@
     "start": "node index.js",
     "start-dev": "nodemon index.js",
     "dev": "nodemon index.js",
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --runInBand",
     "seed": "node seed.js"
   },
   "author": "Osman Jah",
   "license": "ISC",
-  "description": ""
+
+  "description": "",
+  "devDependencies": {
+    "jest": "^30.0.3",
+    "supertest": "^7.1.1",
+    "mongodb-memory-server": "^8.15.1"
+  }
 }
