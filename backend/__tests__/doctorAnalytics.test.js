@@ -90,7 +90,7 @@ describe('Doctor Analytics and Dashboard', () => {
 
     it('should return 404 if doctor profile not found', async () => {
       // Create a mock JWT token with non-existent doctor ID
-      const fakeToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1Y2M5NjQ1ZTVhZGE2ZjNkMDFkNDUxMiIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE3MDc5NzYyNjF9.invalid';
+      const fakeToken = 'Bearer invalid.jwt.token';
       
       const res = await request(app)
         .get('/api/v1/doctors/profile/me')
