@@ -23,7 +23,7 @@
     "start": "node index.js",
     "start-dev": "nodemon index.js",
     "dev": "nodemon index.js",
-    "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --runInBand",
+    "test": "set NODE_ENV=test && set NODE_OPTIONS=--experimental-vm-modules && jest --runInBand",
     "seed": "node seed.js"
   },
   "author": "Osman Jah",

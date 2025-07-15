@@ -1,10 +1,38 @@
 import Review from '../models/ReviewSchema.js';
 import Doctor from '../models/DoctorSchema.js';
+import mongoose from 'mongoose';
 
 // Get all reviews (can be filtered by doctor later if needed)
 export const getAllReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({}).populate('user', 'name photo'); // Populate user details
+    const { doctorId } = req.params;
+    
+    // If doctorId is provided, filter by doctor
+    let query = {};
+    if (doctorId) {
+      // Validate doctorId
+      if (!mongoose.Types.ObjectId.isValid(doctorId)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid doctor ID.',
+        });
+      }
+      
+      // Check if doctor exists
+      const doctor = await Doctor.findById(doctorId);
+      if (!doctor) {
+        return res.status(404).json({
+          success: false,
+          message: 'Doctor not found.',
+        });
+      }
+      
+      query.doctor = doctorId;
+    }
+
+    const reviews = await Review.find(query)
+      .populate('user', 'name photo')
+      .sort({ createdAt: -1 }); // Sort by newest first
 
     res.status(200).json({
       success: true,
@@ -26,14 +54,26 @@ export const createReview = async (req, res) => {
   const doctorId = req.params.doctorId;
   const userId = req.userId; // Assuming userId is set by auth middleware
 
-  if (!req.body.reviewText || req.body.rating == null) {
-    return res.status(400).json({
-      success: false,
-      message: 'Review text and rating are required.',
-    });
-  }
-
   try {
+    const { rating, reviewText } = req.body;
+
+    // Validate rating
+    if (rating === undefined || rating === null) {
+      return res.status(400).json({
+        success: false,
+        message: 'Rating is required.',
+      });
+    }
+
+    // Check if rating is a valid number
+    const numRating = Number(rating);
+    if (isNaN(numRating) || numRating < 1 || numRating > 5 || numRating % 1 !== 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Rating must be a whole number between 1 and 5.',
+      });
+    }
+
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
       return res.status(404).json({
@@ -42,27 +82,25 @@ export const createReview = async (req, res) => {
       });
     }
 
-    // Check if the user has already reviewed this doctor (optional, but good practice)
-    // const existingReview = await Review.findOne({ doctor: doctorId, user: userId });
-    // if (existingReview) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: 'You have already reviewed this doctor.',
-    //   });
-    // }
+    // Check if the user has already reviewed this doctor
+    const existingReview = await Review.findOne({ doctor: doctorId, user: userId });
+    if (existingReview) {
+      return res.status(400).json({
+        success: false,
+        message: 'You have already reviewed this doctor.',
+      });
+    }
 
     const newReview = new Review({
       doctor: doctorId,
       user: userId,
-      reviewText: req.body.reviewText,
-      rating: Number(req.body.rating),
+      reviewText: reviewText || '',
+      rating: numRating,
     });
 
     const savedReview = await newReview.save();
 
-    // The static method on ReviewSchema will handle updating the doctor's averageRating and totalRating
-    // and the reviews array on the doctor model.
-    // We also need to explicitly add the review's ID to the doctor's reviews array.
+    // Update doctor's reviews array
     await Doctor.findByIdAndUpdate(doctorId, {
       $push: { reviews: savedReview._id },
     });
@@ -74,6 +112,15 @@ export const createReview = async (req, res) => {
     });
   } catch (err) {
     console.error('Error creating review:', err);
+    
+    // Handle validation errors
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed: ' + Object.values(err.errors).map(e => e.message).join(', '),
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: 'Failed to submit review.',

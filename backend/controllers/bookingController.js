@@ -142,18 +142,38 @@ export const updateBookingStatus = async (req, res) => {
       if (booking.doctor._id.toString() !== loggedInUserId) {
         return res.status(403).json({ success: false, message: "Doctor: You are not authorized to update this booking as it's not for you." });
       }
+      if (newStatus === booking.status) {
+        return res.status(400).json({ 
+          success: false, 
+          message: `Booking is already ${booking.status}` 
+        });
+      }
+      
       // Doctors can confirm pending bookings, or complete/cancel confirmed/pending ones.
       if ((newStatus === 'confirmed' && booking.status === 'pending') ||
           (newStatus === 'completed' && (booking.status === 'confirmed' || booking.status === 'pending')) ||
           (newStatus === 'cancelled' && (booking.status === 'confirmed' || booking.status === 'pending'))) {
         canUpdate = true;
       } else {
-        return res.status(400).json({ success: false, message: `Doctor: Cannot change status from '${booking.status}' to '${newStatus}'.` });
+        return res.status(400).json({ 
+          success: false, 
+          message: `Doctor: Cannot change status from '${booking.status}' to '${newStatus}'.` 
+        });
       }
     } else if (loggedInUserRole === 'admin') {
+      if (newStatus === booking.status) {
+        return res.status(400).json({ 
+          success: false, 
+          message: `Booking is already ${booking.status}` 
+        });
+      }
+      
       // Admins have more flexibility, but still within reason (e.g., not from completed to pending)
       if ((booking.status === 'completed' || booking.status === 'cancelled') && (newStatus === 'pending' || newStatus === 'confirmed')) {
-        return res.status(400).json({ success: false, message: `Admin: Cannot revert a '${booking.status}' booking to '${newStatus}'.` });
+        return res.status(400).json({ 
+          success: false, 
+          message: `Booking is already ${booking.status}` 
+        });
       }
       canUpdate = true; // Admins can update status more broadly
     }

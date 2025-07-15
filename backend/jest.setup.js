@@ -7,10 +7,7 @@ process.env.JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'testsecret';
 jest.setTimeout(30000);
 
 // Mock email utilities globally for all tests to avoid hitting real SMTP or Mailtrap limits
-jest.mock('./utils/email.js', () => ({
-  sendConfirmationEmail: jest.fn().mockResolvedValue(),
-  sendDoctorNotificationEmail: jest.fn().mockResolvedValue(),
-}));
+jest.mock('./utils/email.js');
 
 let mongoServer;
 

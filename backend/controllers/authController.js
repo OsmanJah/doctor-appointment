@@ -4,26 +4,27 @@ import Doctor from "../models/DoctorSchema.js";
 import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req, res) => {
-  const { name, email, password, role, photo, gender } = req.body;
+  const { name, email, password, role, photo, gender, specialization } = req.body;
 
   try {
-    let user = null;
+    let existingUser = null;
 
     if (role === "patient") {
-      user = await User.findOne({ email });
+      existingUser = await User.findOne({ email });
     } else if (role === "doctor") {
-      user = await Doctor.findOne({ email });
+      existingUser = await Doctor.findOne({ email });
     }
 
-    if (user) {
+    if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     
-
+    let user = null;
     let formattedName = name;
+    
     if (role === "doctor") {
       formattedName = formattedName.replace(/^\s*(dr\.?\s*)/i, "");
       formattedName = `Dr. ${formattedName}`;
@@ -44,7 +45,13 @@ export const registerUser = async (req, res) => {
         email,
         password: hashPassword,
         photo,
+        role: "doctor",
+        specialization: specialization || "General Practice",
       });
+    }
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid role provided" });
     }
 
     await user.save();

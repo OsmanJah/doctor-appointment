@@ -156,6 +156,14 @@ export const deleteDoctor = async (req, res) => {
 export const getSingleDoctor = async (req, res) => {
   const id = req.params.id;
 
+  // Check if ID is valid ObjectId format
+  if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+    return res.status(400).json({ 
+      success: false, 
+      message: "Invalid doctor ID format" 
+    });
+  }
+
   try {
     const doctor = await Doctor.findById(id)
       .populate({
@@ -317,9 +325,16 @@ export const getAvailableSlots = async (req, res) => {
 export const getDoctorAppointments = async (req, res) => {
   try {
     const doctorId = req.userId; 
+    const { status } = req.query;
+
+    // Build query object
+    let query = { doctor: doctorId };
+    if (status) {
+      query.status = status;
+    }
 
     // Retrieve bookings for this doctor
-    const bookings = await Booking.find({ doctor: doctorId })
+    const bookings = await Booking.find(query)
                                    .populate('user', 'name photo') 
                                    .sort({ appointmentDateTime: 1 }); 
 
