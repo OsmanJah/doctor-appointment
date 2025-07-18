@@ -11,6 +11,7 @@ import medicineRoute from './routes/medicine.js';
 import checkoutRoute from './routes/checkout.js';
 import bookingRoute  from './routes/booking.js';
 import uploadRoute   from './routes/upload.js';
+import chatRoute     from './routes/chat.js';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/v1/medicines', medicineRoute);
 app.use('/api/v1/checkout',  checkoutRoute);
 app.use('/api/v1/bookings',  bookingRoute);
 app.use('/api/v1/upload',    uploadRoute);
+app.use('/api/v1/chats',     chatRoute);
 
 // Simple health endpoint used in tests
 app.get('/', (req, res) => res.send('Hello World!'));

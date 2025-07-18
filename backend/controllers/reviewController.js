@@ -82,15 +82,8 @@ export const createReview = async (req, res) => {
       });
     }
 
-    // Check if the user has already reviewed this doctor
-    const existingReview = await Review.findOne({ doctor: doctorId, user: userId });
-    if (existingReview) {
-      return res.status(400).json({
-        success: false,
-        message: 'You have already reviewed this doctor.',
-      });
-    }
-
+    // Multiple reviews from the same user are now allowed
+    
     const newReview = new Review({
       doctor: doctorId,
       user: userId,

@@ -7,6 +7,7 @@ import MyAccount from "../Dashboard/User-Account/MyAccount";
 import Pharmacy from "../pages/Pharmacy";
 import CartPage from "../pages/CartPage";
 import CheckoutSuccess from "../pages/CheckoutSuccess";
+import ChatPage from "../pages/ChatPage";
 
 import Dashboard from "../Dashboard/Doctor-Account/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
@@ -22,6 +23,14 @@ const Router = () => {
       <Route path="/pharmacy" element={<Pharmacy />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout-success" element={<CheckoutSuccess />} />
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute allowedRoles={["patient", "doctor"]}>
+            <ChatPage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/users/profile/me"
         element={

@@ -5,6 +5,7 @@ import { useContext, useEffect, useRef, useCallback } from "react";
 
 import { AuthContext } from "./../../context/AuthContext";
 import { CartContext } from "./../../context/CartContext";
+import { useChatContext } from "./../../context/ChatContext";
 
 const baseNavLinks = [
   {
@@ -16,6 +17,10 @@ const baseNavLinks = [
     display: "Find a Doctor",
   },
   {
+    path: "/chat",
+    display: "Chat",
+  },
+  {
     path: "/pharmacy",
     display: "Pharmacy",
   },
@@ -24,6 +29,7 @@ const baseNavLinks = [
 const Header = () => {
   const { user, token, role } = useContext(AuthContext);
   const { items: cartItems } = useContext(CartContext);
+  const { totalUnreadCount, fetchTotalUnreadCount } = useChatContext();
 
   const totalCartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -32,6 +38,11 @@ const Header = () => {
 
 
   const navLinks = baseNavLinks.filter(link => {
+    // Show chat only for authenticated users
+    if (link.path === '/chat') {
+      return token && user;
+    }
+    // Show pharmacy for non-doctors
     if (link.path === '/pharmacy') {
       return role !== 'doctor';
     }
@@ -57,6 +68,13 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
+  // Fetch unread count when user is authenticated
+  useEffect(() => {
+    if (token && user && fetchTotalUnreadCount) {
+      fetchTotalUnreadCount();
+    }
+  }, [token, user, fetchTotalUnreadCount]);
+
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
   return (
@@ -81,7 +99,14 @@ const Header = () => {
                         : "text-textColor font-[500] text-[16px] leading-7 hover:text-primaryColor transition-colors duration-200"
                     }
                   >
-                    {link.display}
+                    <span className="relative">
+                      {link.display}
+                      {link.path === '/chat' && totalUnreadCount > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                          {totalUnreadCount > 99 ? '99+' : totalUnreadCount}
+                        </span>
+                      )}
+                    </span>
                   </NavLink>
                 </li>
               ))}
