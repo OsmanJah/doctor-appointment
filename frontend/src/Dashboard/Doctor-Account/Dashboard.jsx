@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 // import doctorImg from "../../assets/images/doctor-img02.png";
 import starIcon from "../../assets/images/Star.png";
 import DoctorAbout from "../../pages/Doctors/DoctorAbout";
@@ -10,7 +10,6 @@ import HashLoader from "react-spinners/HashLoader";
 import Appointments from "./Appointments";
 import DoctorFeedback from "../../pages/Doctors/DoctorFeedback";
 import { AuthContext } from "../../context/AuthContext.jsx";
-import { io } from "socket.io-client";
 import { toast } from "react-toastify";
 import DoctorCalendar from "./DoctorCalendar";
 import DoctorAnalytics from "./DoctorAnalytics";
@@ -31,20 +30,6 @@ const Dashboard = () => {
   const loading = loadingProfile || loadingAppointments;
   // Combine or prioritize errors if necessary
   const error = errorProfile || errorAppointments;
-
-  // --- Socket.IO for real-time notifications ---
-  useEffect(() => {
-    if (role === 'doctor' && doctorData?._id) {
-      const socketUrl = BASE_URL.replace(/\/api.*/, '');
-      const socket = io(socketUrl, { transports: ['websocket'], withCredentials: true });
-      socket.emit('join', { doctorId: doctorData._id });
-      socket.on('newBooking', (payload) => {
-        toast.info(`New booking from ${payload.patientName} on ${payload.date} at ${payload.time}`);
-        if (refetchAppointments) refetchAppointments();
-      });
-      return () => socket.disconnect();
-    }
-  }, [role, doctorData]);
 
   return (
     <section>
