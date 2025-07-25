@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Project History
 
 ### Recent Updates
-- **d2314f3** docs: update CHANGELOG.md with project history and features *(Osman Jah)*
+- **4fc7eea** docs: update CHANGELOG.md with latest commit *(Osman Jah)*
+- **3e9ae78** docs: restructure CHANGELOG.md with proper categorization *(Osman Jah)*
+- **d3f901a** docs: update CHANGELOG.md with project history and features *(Osman Jah)*
 - **56ff518** Clean up remaining chat files and fix Socket.IO implementation *(Osman Jah)*
 - **743e19c** fix security issue - remove jwt token from test file *(Osman Jah)*
 - **70c2c21** test: add frontend tests (components, pages, context, hooks) *(Osman Jah)*
@@ -55,4 +57,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Test Coverage**: 95%+ coverage across application
 - **Environment Security**: Secure configuration management
 
-Generated on: 2025-07-25 17:53:45
+Generated on: 2025-07-25 18:01:28
