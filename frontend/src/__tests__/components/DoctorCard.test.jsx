@@ -36,7 +36,7 @@ describe('DoctorCard Component', () => {
   test('has clickable link to doctor profile', () => {
     renderWithRouter(<DoctorCard doctor={mockDoctor} />);
     
-    const profileLink = screen.getByRole('link');
+    const profileLink = screen.getByRole('link', { name: /view profile/i });
     expect(profileLink).toHaveAttribute('href', '/doctors/1');
   });
 
@@ -57,7 +57,7 @@ describe('DoctorCard Component', () => {
   test('has proper hover effects on link', () => {
     renderWithRouter(<DoctorCard doctor={mockDoctor} />);
     
-    const link = screen.getByRole('link');
+    const link = screen.getByRole('link', { name: /view profile/i });
     expect(link).toHaveClass('group', 'hover:bg-buttonBgColor', 'hover:border-none');
   });
 

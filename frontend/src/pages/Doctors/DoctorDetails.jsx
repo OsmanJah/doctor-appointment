@@ -1,17 +1,18 @@
-import { useState } from "react";
-import starIcon from "../../assets/images/Star.png";
+import { useEffect, useState } from "react";
 import DoctorAbout from "./DoctorAbout";
 import DoctorFeedback from './DoctorFeedback';
 import SidePanel from "./SidePanel";
 import { BASE_URL } from "../../config";
 import useFetchData from "../../hooks/useFetchData";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
 import { AiFillStar } from 'react-icons/ai';
 
 const DoctorDetails = () => {
   const [tab, setTab] = useState("about");
   const { id } = useParams();
+  const location = useLocation();
+  const { hash } = location;
 
   const {
     data: doctor,
@@ -42,6 +43,15 @@ const DoctorDetails = () => {
     console.log("DoctorDetails.jsx - Fetched doctor data:", doctor);
     console.log("DoctorDetails.jsx - Fetched locations:", locations);
   }
+
+  useEffect(() => {
+    if (!loading && !error && hash === "#booking") {
+      const bookingSection = document.getElementById("booking-panel");
+      if (bookingSection) {
+        bookingSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [loading, error, hash]);
 
   return (
     <section>
@@ -145,10 +155,9 @@ const DoctorDetails = () => {
                 )}
               </div>
             </div>
-            <div>
+            <div id="booking-panel" tabIndex={-1}>
               <SidePanel
                 doctorId={_id}
-                doctorName={name}
                 ticketPrice={ticketPrice}
               />
             </div>

@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Hardened backend middleware with `helmet`, request logging, and response compression for improved security and performance.
+- Centralized error and 404 handling to return consistent API responses.
+
+### Changed
+- Server start-up now waits for a successful MongoDB connection and handles graceful shutdown signals.
+- CORS configuration now supports environment-configured origin allow-lists while keeping existing behavior by default.
+
 ## Project History
 
 ### Recent Updates
+- **22080a3** feat: enhance frontend UI consistency and aesthetics *(Osman Jah)*
 - **4616493** docs: update CHANGELOG.md with latest commit and restructure for clarity *(Osman Jah)*
 - **abe738b** docs: improve CHANGELOG.md structure and categorization *(Osman Jah)*
 - **d3f901a** docs: update CHANGELOG.md with project history and features *(Osman Jah)*
@@ -57,4 +66,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Test Coverage**: 95%+ coverage across application
 - **Environment Security**: Secure configuration management
 
-Generated on: 2025-07-30 10:35:02
+Generated on: 2025-09-25 23:55:00

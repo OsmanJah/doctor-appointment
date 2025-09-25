@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { BASE_URL } from "../config";
 import useFetchData from "../hooks/useFetchData";
 import HashLoader from "react-spinners/HashLoader";
@@ -8,9 +7,15 @@ const Pharmacy = () => {
   const { data: medicines, loading, error } = useFetchData(`${BASE_URL}/medicines`);
 
   return (
-    <section>
+    <section className="section--alt">
       <div className="container">
-  <h2 className="heading heading--accent text-center mb-10">Pharmacy</h2>
+        <div className="max-w-3xl mx-auto text-center">
+          <span className="section__eyebrow">Smart Pharmacy</span>
+          <h2 className="heading heading--accent">Your curated treatment partner</h2>
+          <p className="text__para mt-4">
+            Shop clinician-approved medicines and wellness essentials, with transparent pricing and doorstep delivery options.
+          </p>
+        </div>
 
         {loading && (
           <div className="flex justify-center mt-10">

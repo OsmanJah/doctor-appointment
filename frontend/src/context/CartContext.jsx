@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect, useCallback } from 'react';
 
 
 const calculateTotalPrice = (items) => {
@@ -122,17 +122,17 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cartItems', JSON.stringify(cartState.items));
   }, [cartState.items]);
 
-  const addItemToCartHandler = (item) => {
+  const addItemToCartHandler = useCallback((item) => {
     dispatchCartAction({ type: 'ADD_ITEM', payload: item });
-  };
+  }, [dispatchCartAction]);
 
-  const removeItemFromCartHandler = (id) => {
+  const removeItemFromCartHandler = useCallback((id) => {
     dispatchCartAction({ type: 'REMOVE_ITEM', payload: id });
-  };
+  }, [dispatchCartAction]);
 
-   const clearCartHandler = () => {
+  const clearCartHandler = useCallback(() => {
     dispatchCartAction({ type: 'CLEAR_CART' });
-  };
+  }, [dispatchCartAction]);
 
   const cartContext = {
     items: cartState.items,

@@ -12,6 +12,7 @@ const Doctors = () => {
     loading,
     error,
   } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
+  const quickFilters = ["General Medicine", "Dermatology", "Pediatrics", "Cardiology"];
 
   const handleSearch = () => {
     setQuery(query.trim());
@@ -29,23 +30,41 @@ const Doctors = () => {
 
   return (
     <>
-  <section className="bg-secondaryColor">
+      <section className="bg-secondaryColor">
         <div className="container text-center">
           <h2 className="heading heading--accent">Find a Doctor</h2>
-          <div className="max-w-[570px] mx-auto mt-[30px] bg-primaryColor/10 rounded-md flex items-center justify-between ">
-            <input
-              className="py-4 pl-4 pr-2 focus:outline-none cursor-pointer w-full bg-transparent placeholder:text-textColor"
-              type="search"
-              placeholder="Search by doctor name or specialization"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-            />
-            <button
-              className="btn mt-0 rounded-[0px] rounded-r-md"
-              onClick={handleSearch}
-            >
-              Search
-            </button>
+          <p className="text__para text-center max-w-[540px] mx-auto">
+            Browse verified specialists, compare expertise, and lock in an appointment that fits your schedule.
+          </p>
+          <div className="max-w-[640px] mx-auto mt-8 surface-glass p-3 md:p-4 flex flex-col gap-3">
+            <div className="flex items-center gap-2 bg-white/70 rounded-[14px] border border-primaryColor/20 px-3 py-1 focus-within:border-primaryColor/50 transition">
+              <input
+                className="flex-1 bg-transparent py-3 md:py-4 pl-2 pr-2 focus:outline-none cursor-text text-[16px] placeholder:text-textColor/70"
+                type="search"
+                placeholder="Search by doctor name or specialization"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+              />
+              <button
+                className="btn btn--sm mt-0"
+                onClick={handleSearch}
+              >
+                Search
+              </button>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {quickFilters.map(filter => (
+                <button
+                  key={filter}
+                  type="button"
+                  onClick={() => setQuery(filter)}
+                  className="px-4 py-2 rounded-full border border-primaryColor/20 text-sm text-headingColor/90 bg-white/70 hover:bg-primaryColor/10 transition"
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>

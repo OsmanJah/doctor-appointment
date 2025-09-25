@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import HashLoader from 'react-spinners/HashLoader';
 import { AuthContext } from '../../context/AuthContext';
 
-const SidePanel = ({ ticketPrice, doctorId, doctorName }) => {
+const SidePanel = ({ ticketPrice, doctorId }) => {
   const { user, role, token: authToken } = useContext(AuthContext); // Use authToken from context
 
   const [selectedDate, setSelectedDate] = useState('');

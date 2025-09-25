@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
+/* eslint-disable react/prop-types */
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import { BsCapsule } from "react-icons/bs";
 
 const MedicineCard = ({ medicine }) => {
   const { name, price, description, _id: medicineId } = medicine;
   const { addItem } = useContext(CartContext);
-  const { user, role, token } = useContext(AuthContext);
+  const { user, role } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const isOutOfStock = false;
@@ -34,29 +36,46 @@ const MedicineCard = ({ medicine }) => {
     toast.success(`${name} added to cart!`);
   };
 
+  const formattedPrice = price ? `${(price || 0).toLocaleString("hu-HU")} HUF` : "Contact for price";
+  const summary = description
+    ? `${description.substring(0, 110)}${description.length > 110 ? "…" : ""}`
+    : "No description available.";
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col p-5">
-      <div className="flex flex-col flex-grow">
-        <h3 className="text-xl font-semibold text-headingColor mb-2 truncate" title={name}>
-          {name}
-        </h3>
-        <p className="text-sm text-textColor flex-grow mb-3">
-          {description ? description.substring(0, 100) + (description.length > 100 ? "..." : "") : "No description available."}
-        </p>
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-lg font-bold text-primaryColor">
-            {price}
+    <article className="card h-full flex flex-col">
+      <div className="card__body flex-1">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-primaryColor/70">
+              <BsCapsule /> Featured Formula
+            </span>
+            <h3 className="text-xl font-semibold text-headingColor mt-2" title={name}>
+              {name}
+            </h3>
+          </div>
+          <span className="pill bg-primaryColor/10 text-primaryColor border-primaryColor/20">
+            {formattedPrice}
           </span>
         </div>
-        <button
-          className="w-full bg-primaryColor hover:bg-primaryColorHover text-white text-[16px] leading-[24px] rounded-lg px-4 py-2.5 mt-auto transition-colors duration-200"
-          onClick={handleAddToCart}
-          disabled={isOutOfStock}
-        >
-          Add to Cart
-        </button>
+
+        <p className="text-sm text-textColor/90 leading-6 mt-3 flex-1">
+          {summary}
+        </p>
+
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <span className="text-xs text-textColor/70">
+            Eligible for patient dashboard refills
+          </span>
+          <button
+            className="btn btn--sm mt-0"
+            onClick={handleAddToCart}
+            disabled={isOutOfStock}
+          >
+            Add to Cart
+          </button>
+        </div>
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -18,10 +18,15 @@ export const createBooking = async (req, res) => {
       return res.status(400).json({ success: false, message: "Missing required booking information (doctorId, appointmentDate, appointmentTime)" });
     }
 
-    const doctor = await Doctor.findById(doctorId);
-    if (!doctor) {
-        return res.status(404).json({ success: false, message: "Doctor not found" });
-    }
+  const doctor = await Doctor.findById(doctorId);
+  if (!doctor) {
+    return res.status(404).json({ success: false, message: "Doctor not found" });
+  }
+
+  const patient = await User.findById(patientId);
+  if (!patient) {
+    return res.status(404).json({ success: false, message: "Patient not found" });
+  }
 
     const dateTime = combineDateAndTime(appointmentDate, appointmentTime);
     if (isNaN(dateTime.getTime())) {
@@ -57,39 +62,48 @@ export const createBooking = async (req, res) => {
     // Send confirmation email (fail-safe) - ASYNC to avoid blocking the response
     const sendEmailsAsync = async () => {
       try {
-        const patient = await User.findById(patientId);
-        const doctor = await Doctor.findById(doctorId);
-        if (patient && doctor) {
-          const firstName = patient.name.split(' ')[0];
-          
-          // Send patient email first
-          await sendConfirmationEmail(
-            patient.email,
-            firstName,
-            doctor.name,
-            appointmentDate,
-            appointmentTime
-          );
+        const firstName = patient.name?.split?.(' ')?.[0] || patient.name || '';
 
-          // Send doctor email second (with built-in retry delay)
-          await sendDoctorNotificationEmail(
-            doctor.email,
-            patient.name,
-            appointmentDate,
-            appointmentTime
-          );
-
-          // Emit real-time event
+        if (patient.email) {
           try {
-            const io = getIO();
-            io.to(doctorId.toString()).emit('newBooking', {
-              patientName: patient.name,
-              date: appointmentDate,
-              time: appointmentTime,
-            });
-          } catch (socketErr) {
-            console.error('Socket emit failed:', socketErr.message);
+            await sendConfirmationEmail(
+              patient.email,
+              firstName,
+              doctor.name,
+              appointmentDate,
+              appointmentTime
+            );
+          } catch (patientEmailErr) {
+            console.error('Failed to send patient confirmation email:', patientEmailErr?.message || patientEmailErr);
           }
+        } else {
+          console.warn(`Skipping patient confirmation email: missing email for user ${patientId}`);
+        }
+
+        if (doctor.email) {
+          try {
+            await sendDoctorNotificationEmail(
+              doctor.email,
+              patient.name,
+              appointmentDate,
+              appointmentTime
+            );
+          } catch (doctorEmailErr) {
+            console.error('Failed to send doctor notification email:', doctorEmailErr?.message || doctorEmailErr);
+          }
+        } else {
+          console.warn(`Skipping doctor notification email: missing email for doctor ${doctorId}`);
+        }
+
+        try {
+          const io = getIO();
+          io.to(doctorId.toString()).emit('newBooking', {
+            patientName: patient.name,
+            date: appointmentDate,
+            time: appointmentTime,
+          });
+        } catch (socketErr) {
+          console.error('Socket emit failed:', socketErr.message);
         }
       } catch (err) {
         console.error('Failed to send email notifications:', err);

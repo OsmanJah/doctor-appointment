@@ -5,6 +5,7 @@ import { BASE_URL } from "../config";
 import { toast } from "react-toastify";
 import uploadImageToCloudinary from "../utils/uploadCloudinary";
 import HashLoader from "react-spinners/HashLoader";
+import { BsCheckCircleFill } from "react-icons/bs";
 
 const SignUp = () => {
   const [previewUrl, setPreviewUrl] = useState("");
@@ -70,132 +71,167 @@ const SignUp = () => {
     }
   };
 
-  return (
-    <section className="px-5 xl:px-0">
-      <div className="max-w-[1170px] mx-auto ">
-        <div className="grid grid-cols-1 lg:grid-cols-2 ">
+  const perks = [
+    "Personalized care plans",
+    "Verified medical experts",
+    "Automated visit reminders",
+  ];
 
-          <div className="hidden lg:block bg-brand-diagonal animate-gradient-x rounded-l-lg" style={{backgroundSize:'200% 200%'}}>
-            <figure className="rounded-l-lg">
-              <img className="w-full rounded-l-lg" src={signupImg} alt="" />
+  return (
+    <section className="section--alt px-5 xl:px-0">
+      <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-14 items-center">
+        <div className="hidden lg:flex flex-col gap-8">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-3xl bg-brand-diagonal-soft opacity-80 blur-2xl" />
+            <figure className="relative rounded-3xl overflow-hidden shadow-glowSoft border border-white/40">
+              <img className="w-full h-full object-cover" src={signupImg} alt="Welcome to MarieCare" />
             </figure>
           </div>
-
-          <div className="rounded-l-lg lg:pl-16 py-10 bg-white/95 backdrop-blur-sm rounded-2xl shadow-panelShadow border border-slate-100 p-6">
-            <h3 className="text-headingColor text-[22px] leading-9 font-bold mb-10">
-              Create an <span className="text-primaryColor">Account</span>
+          <div className="surface-glass p-8 rounded-3xl shadow-panelShadow border border-white/40">
+            <span className="section__eyebrow">Why people choose MarieCare</span>
+            <h3 className="heading heading--accent text-[30px] leading-[40px]">
+              Premium experiences crafted with care
             </h3>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-5">
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Full Name"
-                  className="w-full pr-4 py-3 border-b border-solid border-primaryColor/30 focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor"
-                  required
-                />
-              </div>
-              <div className="mb-5">
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  name="email"
-                  placeholder="Enter Your Email"
-                  className="w-full pr-4 py-3 border-b border-solid border-primaryColor/30 focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor"
-                  required
-                />
-              </div>
-
-              <div className="mb-5">
-                <input
-                  type="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  name="password"
-                  placeholder="Password"
-                  className="w-full pr-4 py-3 border-b border-solid border-primaryColor/30 focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor"
-                  required
-                />
-              </div>
-
-              <div className="mb-5 flex items-center justify-between">
-                <label className="text-headingColor font-bold text-[16px] leading-7">
-                  Are you a:
-                  <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleInputChange}
-                    className="text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none"
-                  >
-                    <option value="patient">Patient</option>
-                    <option value="doctor">Doctor</option>
-                  </select>
-                </label>
-
-                <label className="text-headingColor font-bold text-[16px] leading-7]">
-                  Gender:
-                  <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                    className="text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none"
-                  >
-                    <option value="">Select</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                </label>
-              </div>
-
-              <div className="mb-5 flex items-center gap-3">
-                {previewUrl && (
-                  <figure className="w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center">
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="w-full rounded-full"
-                    />
-                  </figure>
-                )}
-                <div className="relative inline-block w-[130px] h-[50px]">
-                  <input
-                    className="custom-file-input absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                    id="customFile"
-                    name="photo"
-                    type="file"
-                    accept=".jpg,.png,.jpeg"
-                    onChange={handleFileInputChange}
-                  />
-                  <label
-                    className="custom-file-label absolute top-0 left-0 w-full h-full flex items-center px-[0.75rem] py-[0.375rem] text-[15px] leading-6 overflow-hidden bg-primaryColor/10 text-headingColor font-semibold rounded-lg truncate cursor-pointer justify-center"
-                    htmlFor="customFile"
-                  >
-                    Upload Photo
-                  </label>
-                </div>
-              </div>
-
-              <div className="mt-7">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-primaryColor text-white py-3 px-4 rounded-lg text-[18px] leading-[30px] hover:bg-primaryColorHover transition-colors"
-                >
-                  {loading ? <HashLoader size={25} color="#fff" /> : "Sign Up"}
-                </button>
-              </div>
-
-              <p className="mt-5 text-textColor text-center">
-                Already have an account?{" "}
-                <Link to="/login" className="text-primaryColor font-medium hover:underline">
-                  Login
-                </Link>
-              </p>
-            </form>
+            <ul className="mt-6 space-y-4">
+              {perks.map(perk => (
+                <li key={perk} className="flex items-start gap-3">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primaryColor/15 text-primaryColor">
+                    <BsCheckCircleFill className="text-base" />
+                  </span>
+                  <span className="text-headingColor/90 font-semibold text-[15px] leading-6">
+                    {perk}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
+        </div>
+
+        <div className="surface-glass rounded-3xl shadow-panelShadow border border-white/50 lg:pl-14 py-10 px-6 lg:px-10">
+          <h3 className="text-headingColor text-[30px] leading-[40px] font-bold mb-6 text-center lg:text-left">
+            Create an <span className="text-primaryColor">Account</span>
+          </h3>
+          <p className="text-sm text-textColor/80 mb-8 text-center lg:text-left">
+            Sign up in minutes to start booking appointments, managing prescriptions, and messaging clinicians securely.
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="form__label">Full name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Full Name"
+                className="form__input"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="form__label">Email address</label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                name="email"
+                placeholder="Enter Your Email"
+                className="form__input"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="form__label">Create password</label>
+              <input
+                type="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                name="password"
+                placeholder="Password"
+                className="form__input"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="form__label" htmlFor="signup-role">Are you a:</label>
+                <select
+                  id="signup-role"
+                  name="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                  className="form__input"
+                >
+                  <option value="patient">Patient</option>
+                  <option value="doctor">Doctor</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="form__label" htmlFor="signup-gender">Gender</label>
+                <select
+                  id="signup-gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  className="form__input"
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="non-binary">Non-binary</option>
+                  <option value="prefer-not">Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              {previewUrl && (
+                <figure className="w-[70px] h-[70px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center overflow-hidden">
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                </figure>
+              )}
+              <div className="relative inline-flex items-center">
+                <input
+                  className="custom-file-input absolute inset-0 opacity-0 cursor-pointer"
+                  id="customFile"
+                  name="photo"
+                  type="file"
+                  accept=".jpg,.png,.jpeg"
+                  onChange={handleFileInputChange}
+                />
+                <label
+                  className="custom-file-label btn--ghost"
+                  htmlFor="customFile"
+                >
+                  Upload Photo
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn w-full text-[18px] leading-[30px]"
+              >
+                {loading ? <HashLoader size={25} color="#fff" /> : "Sign Up"}
+              </button>
+            </div>
+
+            <p className="text-textColor text-center text-sm">
+              Already have an account?
+              <Link to="/login" className="text-primaryColor font-semibold ml-1 hover:underline">
+                Login
+              </Link>
+            </p>
+          </form>
         </div>
       </div>
     </section>
