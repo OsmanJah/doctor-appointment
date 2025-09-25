@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthContext } from '../../context/AuthContext';
 import useFetchData from '../../hooks/useFetchData';
 
@@ -10,12 +11,15 @@ vi.mock('../../config', () => ({
 }));
 
 const renderWithProviders = (hook) => {
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 0 } } });
   return renderHook(hook, {
     wrapper: ({ children }) => (
       <BrowserRouter>
-        <AuthContext.Provider value={{ token: 'test-token', dispatch: vi.fn() }}>
-          {children}
-        </AuthContext.Provider>
+        <QueryClientProvider client={queryClient}>
+          <AuthContext.Provider value={{ token: 'test-token', dispatch: vi.fn() }}>
+            {children}
+          </AuthContext.Provider>
+        </QueryClientProvider>
       </BrowserRouter>
     )
   });

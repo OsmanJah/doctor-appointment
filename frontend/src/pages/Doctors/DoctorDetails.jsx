@@ -48,7 +48,7 @@ const DoctorDetails = () => {
       <div className="max-w-[1170px] px-[20px] mx-auto">
         {loading && (
           <div className="flex items-center justify-center w-full h-full">
-            <HashLoader color="#0067FF" />
+            <HashLoader color="#14b8a6" />
           </div>
         )}
 
@@ -106,7 +106,7 @@ const DoctorDetails = () => {
                 </div>
               </div>
 
-              <div className="mt-[70px] border-b border-solid border-[#0066ff34]">
+              <div className="mt-[70px] border-b border-solid border-primaryColor/20">
                 <div>
                   <button
                     onClick={() => setTab("about")}

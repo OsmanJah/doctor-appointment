@@ -93,7 +93,7 @@ const Tabs = ({ tab, setTab }) => {
         <div className="mt-[50px] w-full">
           <button
             onClick={handleLogout}
-            className="btn w-full bg-red-600 hover:bg-red-700 text-[16px] leading-7 rounded-md"
+            className="btn--outline w-full text-[16px] leading-7 rounded-md"
           >
             Logout
           </button>

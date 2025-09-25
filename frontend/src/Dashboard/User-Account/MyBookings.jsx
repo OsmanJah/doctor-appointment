@@ -64,7 +64,7 @@ const MyBookings = () => {
     <div>
       {loading && (
         <div className="flex items-center justify-center w-full h-full">
-          <HashLoader color="#0067FF" />
+          <HashLoader color="#14b8a6" />
         </div>
       )}
 
@@ -120,11 +120,11 @@ const MyBookings = () => {
                     )}
                     <p>
                         <strong>Status:</strong> 
-                        <span className={`ml-2 font-medium px-2 py-0.5 rounded-full text-xs 
-                            ${booking.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
-                              booking.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
-                              booking.status === 'cancelled' ? 'bg-red-100 text-red-700' : 
-                              'bg-gray-100 text-gray-700'}
+                        <span className={`status-pill 
+                            ${booking.status === 'confirmed' ? 'status-confirmed' : 
+                              booking.status === 'pending' ? 'status-pending' : 
+                              booking.status === 'cancelled' ? 'status-cancelled' : 
+                              'status-completed'}
                         `}>
                            {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                         </span>
@@ -137,7 +137,7 @@ const MyBookings = () => {
                     <button
                       onClick={() => handleCancelBooking(booking._id)}
                       disabled={cancellingId === booking._id} // Disable while cancelling this specific booking
-                      className={`w-full sm:w-auto px-3 py-1.5 text-sm rounded-md text-white bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center`}
+                      className={`w-full sm:w-auto px-3 py-1.5 text-sm rounded-md text-white bg-slate-600 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center`}
                     >
                       {cancellingId === booking._id ? <HashLoader size={18} color="#fff" /> : 'Cancel Appointment'}
                     </button>

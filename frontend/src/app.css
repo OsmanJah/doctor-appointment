@@ -19,7 +19,7 @@ body {
 }
 
 .swiper-pagination-bullet-active {
-  background: #0067ff !important;
+  background: #14b8a6 !important; /* primary teal */
   border: none !important;
 }
 
@@ -32,9 +32,9 @@ body {
 }
 
 .swiper-slide.swiper-slide-next {
-  background: #0067ff !important;
+  background: #14b8a6 !important; /* primary teal */
   border-radius: 12px;
-  box-shadow: 0px 20px 70px rgba(0, 103, 255, 0.3);
+  box-shadow: 0px 20px 70px rgba(20, 184, 166, 0.3);
 }
 
 .swiper-slide.swiper-slide-next h4,
@@ -49,8 +49,9 @@ body {
   position: sticky;
   top: 0;
   left: 0;
-  background: #fff;
-  box-shadow: 3px 3px -8px 3px #ddd;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: saturate(180%) blur(10px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
   z-index: 99;
 }
 

@@ -16,7 +16,7 @@ const Home = () => {
           <div className="flex flex-col lg:flex-row gap-[90px] items-center justify-between">
             <div>
               <div className=" lg:w-[570px]">
-                <h1 className="text-headingColor text-[36px] leading-[46px] md:text-[60px] md:leading-[70px] font-[800] ">
+                <h1 className="heading bg-clip-text text-transparent bg-brand-diagonal-strong text-[36px] leading-[46px] md:text-[60px] md:leading-[70px] " style={{backgroundSize:'140% 140%'}}>
                   We help patients live a healthy, longer life.
                 </h1>
                 <p className="text__para">
@@ -32,12 +32,12 @@ const Home = () => {
 
             <div className="flex flex-col md:flex-row gap-[20px] lg:gap-[30px] justify-center md:justify-end items-center w-full lg:w-1/2">
               <div className="w-full md:w-1/2">
-                <img className="w-full h-auto object-cover rounded-lg shadow-lg" src={heroImg01} alt="MarieCare Doctor 1" />
+                <img className="w-full h-auto object-cover rounded-lg shadow-lg animate-float" src={heroImg01} alt="MarieCare Doctor 1" />
               </div>
 
               <div className="w-full md:w-1/2">
                 <img
-                  className="w-full h-auto object-cover rounded-lg shadow-lg"
+                  className="w-full h-auto object-cover rounded-lg shadow-lg animate-float"
                   src={heroImg02}
                   alt="MarieCare Doctor 2"
                 />
@@ -50,7 +50,7 @@ const Home = () => {
       <section>
         <div className="container ">
           <div className="lg:w-[470px] mx-auto">
-            <h2 className="heading text-center">
+            <h2 className="heading heading--accent text-center">
               Your Path to Comprehensive Healthcare
             </h2>
             <p className="text__para text-center">
@@ -59,9 +59,11 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-[30px] mt-[30px] lg:mt-[55px]">
-            <div className="py-[30px] px-5 ">
+            <div className="card py-[30px] px-5 ">
               <div className="flex items-center justify-center">
-                <img src={icon01} alt="" />
+                <span className="pill">
+                  <img src={icon01} alt="" className="w-6 h-6" />
+                </span>
               </div>
 
               <div className="mt-[30px]">
@@ -74,7 +76,7 @@ const Home = () => {
 
                 <Link
                   to="/doctors"
-                  className="w-[44px] h-[44px] rounded-full border border-solid border-primaryColor mt-[30px] mx-auto flex items-center justify-center group hover:bg-primaryColor hover:border-none"
+                  className="w-[44px] h-[44px] rounded-full border border-solid border-primaryColor mt-[30px] mx-auto flex items-center justify-center group hover:bg-primaryColor hover:border-none shadow-glowSoft"
                   aria-label="View doctors"
                 >
                   <FaAngleRight className="group-hover:text-white w-6 h-5" />
@@ -82,9 +84,11 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="py-[30px] px-5 ">
+            <div className="card py-[30px] px-5 ">
               <div className="flex items-center justify-center">
-                <img src={icon02} alt="" />
+                <span className="pill">
+                  <img src={icon02} alt="" className="w-6 h-6" />
+                </span>
               </div>
 
               <div className="mt-[30px]">
@@ -97,16 +101,18 @@ const Home = () => {
 
                 <Link
                   to="/doctors"
-                  className="w-[44px] h-[44px] rounded-full border border-solid border-primaryColor mt-[30px] mx-auto flex items-center justify-center group hover:bg-primaryColor hover:border-none"
+                  className="w-[44px] h-[44px] rounded-full border border-solid border-primaryColor mt-[30px] mx-auto flex items-center justify-center group hover:bg-primaryColor hover:border-none shadow-glowSoft"
                   aria-label="View doctors"
                 >
                   <FaAngleRight className="group-hover:text-white w-6 h-5" />
                 </Link>
               </div>
             </div>
-            <div className="py-[30px] px-5 ">
+            <div className="card py-[30px] px-5 ">
               <div className="flex items-center justify-center">
-                <img src={icon03} alt="" />
+                <span className="pill">
+                  <img src={icon03} alt="" className="w-6 h-6" />
+                </span>
               </div>
 
               <div className="mt-[30px]">
@@ -119,7 +125,7 @@ const Home = () => {
 
                 <Link
                   to="/doctors"
-                  className="w-[44px] h-[44px] rounded-full border border-solid border-primaryColor mt-[30px] mx-auto flex items-center justify-center group hover:bg-primaryColor hover:border-none"
+                  className="w-[44px] h-[44px] rounded-full border border-solid border-primaryColor mt-[30px] mx-auto flex items-center justify-center group hover:bg-primaryColor hover:border-none shadow-glowSoft"
                   aria-label="View doctors"
                 >
                   <FaAngleRight className="group-hover:text-white w-6 h-5" />
@@ -133,7 +139,7 @@ const Home = () => {
       <section>
         <div className="container">
           <div className="xl:w-[470px] mx-auto">
-            <h2 className="heading text-center">Our great doctors</h2>
+            <h2 className="heading heading--accent text-center">Our great doctors</h2>
             <p className="text__para text-center">
               Meet the dedicated professionals at MarieCare. Our team is committed to 
               providing exceptional, patient-focused medical services in Hungary.

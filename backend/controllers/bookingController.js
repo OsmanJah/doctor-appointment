@@ -54,44 +54,52 @@ export const createBooking = async (req, res) => {
 
     await newBooking.save();
 
-    // Send confirmation email (fail-safe)
-    try {
-      const patient = await User.findById(patientId);
-      const doctor = await Doctor.findById(doctorId);
-      if (patient && doctor) {
-        const firstName = patient.name.split(' ')[0];
-        await sendConfirmationEmail(
-          patient.email,
-          firstName,
-          doctor.name,
-          appointmentDate,
-          appointmentTime
-        );
+    // Send confirmation email (fail-safe) - ASYNC to avoid blocking the response
+    const sendEmailsAsync = async () => {
+      try {
+        const patient = await User.findById(patientId);
+        const doctor = await Doctor.findById(doctorId);
+        if (patient && doctor) {
+          const firstName = patient.name.split(' ')[0];
+          
+          // Send patient email first
+          await sendConfirmationEmail(
+            patient.email,
+            firstName,
+            doctor.name,
+            appointmentDate,
+            appointmentTime
+          );
 
-        // Notify doctor as well
-        await sendDoctorNotificationEmail(
-          doctor.email,
-          patient.name,
-          appointmentDate,
-          appointmentTime
-        );
+          // Send doctor email second (with built-in retry delay)
+          await sendDoctorNotificationEmail(
+            doctor.email,
+            patient.name,
+            appointmentDate,
+            appointmentTime
+          );
 
-        // Emit real-time event
-        try {
-          const io = getIO();
-          io.to(doctorId.toString()).emit('newBooking', {
-            patientName: patient.name,
-            date: appointmentDate,
-            time: appointmentTime,
-          });
-        } catch (socketErr) {
-          console.error('Socket emit failed:', socketErr.message);
+          // Emit real-time event
+          try {
+            const io = getIO();
+            io.to(doctorId.toString()).emit('newBooking', {
+              patientName: patient.name,
+              date: appointmentDate,
+              time: appointmentTime,
+            });
+          } catch (socketErr) {
+            console.error('Socket emit failed:', socketErr.message);
+          }
         }
+      } catch (err) {
+        console.error('Failed to send email notifications:', err);
       }
-    } catch (err) {
-      console.error('Failed to send email notifications:', err);
-    }
+    };
 
+    // Start email sending in background (don't await)
+    sendEmailsAsync();
+
+    // Respond immediately to frontend
     res.status(201).json({ 
       success: true, 
       message: "Appointment booked successfully!", 

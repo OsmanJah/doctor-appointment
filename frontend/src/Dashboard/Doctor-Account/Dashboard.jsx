@@ -79,7 +79,7 @@ const Dashboard = () => {
                     </div>
                     
 
-                    <div className="mt-10 pt-5 border-t border-solid border-[#0066ff1a]">
+                    <div className="mt-10 pt-5 border-t border-solid border-primaryColor/20">
                       <DoctorAbout
                         name={doctorData?.name}
                         about={doctorData?.about}
@@ -90,7 +90,7 @@ const Dashboard = () => {
 
                     {/* Reviews Section */}
                     {doctorData?.reviews && (
-                      <div className="mt-10 pt-5 border-t border-solid border-[#0066ff1a]">
+                      <div className="mt-10 pt-5 border-t border-solid border-primaryColor/20">
                         <DoctorFeedback
                           reviews={doctorData.reviews}
                           totalRating={doctorData.totalRating}

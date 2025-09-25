@@ -144,7 +144,7 @@ const DoctorFeedback = ({ reviews, totalRating, averageRating, doctorId, refetch
                 Share your feedback or suggestions*
               </h3>
               <textarea
-                className="border border-solid border-[#0066ff34] focus:outline outline-primaryColor w-full px-4 py-3 rounded-md"
+                className="border border-solid border-primaryColor/20 focus:outline outline-primaryColor w-full px-4 py-3 rounded-md"
                 rows="5"
                 placeholder="Write your message"
                 value={reviewText}

@@ -10,16 +10,16 @@ const Pharmacy = () => {
   return (
     <section>
       <div className="container">
-        <h2 className="heading text-center mb-10">Pharmacy</h2>
+  <h2 className="heading heading--accent text-center mb-10">Pharmacy</h2>
 
         {loading && (
           <div className="flex justify-center mt-10">
-            <HashLoader size={35} color="#4FD1C5" />
+            <HashLoader size={35} color="#14b8a6" />
           </div>
         )}
 
         {error && !loading && (
-          <div className="text-center text-red-600 mt-10">
+          <div className="text-center text-slate-600 mt-10">
             <p>Error loading medicines: {error}</p>
           </div>
         )}

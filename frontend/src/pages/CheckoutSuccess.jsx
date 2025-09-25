@@ -13,7 +13,7 @@ const CheckoutSuccess = () => {
   return (
     <section>
       <div className="container text-center">
-        <h2 className="heading mb-4">Payment Successful!</h2>
+  <h2 className="heading heading--accent mb-4">Payment Successful!</h2>
         <p className="text__para mb-6">
           Thank you for your purchase.
         </p>

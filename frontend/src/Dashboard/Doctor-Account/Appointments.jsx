@@ -104,10 +104,10 @@ const Appointments = ({ appointments, refetchAppointments }) => {
                   {role === 'doctor' && doctorNextStatuses(item.status).length > 0 ? (
                     <select
                       className={`border rounded px-2 py-1 text-xs 
-                        ${item.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
-                          item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
-                          item.status === 'cancelled' ? 'bg-red-100 text-red-700' : 
-                          item.status === 'completed' ? 'bg-gray-100 text-gray-700' : ''}`}
+                        ${item.status === 'confirmed' ? 'status-confirmed' : 
+                          item.status === 'pending' ? 'status-pending' : 
+                          item.status === 'cancelled' ? 'status-cancelled' : 
+                          'status-completed'}`}
                       value={item.status}
                       disabled={loadingId === item._id}
                       onChange={(e) => updateStatus(item._id, e.target.value)}
@@ -118,11 +118,11 @@ const Appointments = ({ appointments, refetchAppointments }) => {
                       ))}
                     </select>
                   ) : (
-                    <span className={`ml-2 font-medium px-2 py-0.5 rounded-full text-xs 
-                        ${item.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
-                          item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
-                          item.status === 'cancelled' ? 'bg-red-100 text-red-700' : 
-                          'bg-gray-100 text-gray-700'}`}>{item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                    <span className={`status-pill 
+                        ${item.status === 'confirmed' ? 'status-confirmed' : 
+                          item.status === 'pending' ? 'status-pending' : 
+                          item.status === 'cancelled' ? 'status-cancelled' : 
+                          'status-completed'}`}>{item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
                   )}
                 </p>
               </div>

@@ -273,6 +273,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
             value={newPassword}
             onChange={handleNewPasswordChange}
             name="newPassword"
+            autoComplete="new-password"
             placeholder="Leave blank to keep current password"
             className="form__input"
           />
@@ -373,7 +374,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
                 <div className="col-span-full md:col-span-1 flex justify-end md:justify-start mt-2 md:mt-0">
                   <button 
                     onClick={e => deleteTimeSlot(e, index)} 
-                    className="text-red-600 hover:text-red-800 transition-colors duration-200 p-2 rounded-full hover:bg-red-100"
+                    className="text-slate-600 hover:text-slate-800 transition-colors duration-200 p-2 rounded-full hover:bg-slate-100"
                   >
                     <AiOutlineDelete size={22} />
                   </button>
@@ -431,7 +432,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
                 <div className="flex items-end">
                   <button 
                     onClick={e => deleteQualification(e, index)} 
-                    className="text-red-600 hover:text-red-800 transition-colors duration-200 p-2 ml-2 mb-1 rounded-full hover:bg-red-100"
+                    className="text-slate-600 hover:text-slate-800 transition-colors duration-200 p-2 ml-2 mb-1 rounded-full hover:bg-slate-100"
                   >
                     <AiOutlineDelete size={22} />
                   </button>
@@ -489,7 +490,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
                 <div className="flex items-end">
                   <button 
                     onClick={e => deleteExperience(e, index)} 
-                    className="text-red-600 hover:text-red-800 transition-colors duration-200 p-2 ml-2 mb-1 rounded-full hover:bg-red-100"
+                    className="text-slate-600 hover:text-slate-800 transition-colors duration-200 p-2 ml-2 mb-1 rounded-full hover:bg-slate-100"
                   >
                     <AiOutlineDelete size={22} />
                   </button>
@@ -521,7 +522,7 @@ const Profile = ({ doctorData, refetchDoctorData }) => {
                 />
                 <button 
                   onClick={e => deleteLocation(e, index)} 
-                  className="text-red-600 hover:text-red-800 transition-colors duration-200 p-2 ml-2 rounded-full hover:bg-red-100"
+                  className="text-slate-600 hover:text-slate-800 transition-colors duration-200 p-2 ml-2 rounded-full hover:bg-slate-100"
                 >
                   <AiOutlineDelete size={22} />
                 </button>

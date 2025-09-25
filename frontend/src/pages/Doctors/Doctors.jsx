@@ -29,10 +29,10 @@ const Doctors = () => {
 
   return (
     <>
-      <section className="bg-[#fff9ea]">
+  <section className="bg-secondaryColor">
         <div className="container text-center">
-          <h2 className="heading">Find a Doctor</h2>
-          <div className="max-w-[570px] mx-auto mt-[30px] bg-[#0066ff2c] rounded-md flex items-center justify-between ">
+          <h2 className="heading heading--accent">Find a Doctor</h2>
+          <div className="max-w-[570px] mx-auto mt-[30px] bg-primaryColor/10 rounded-md flex items-center justify-between ">
             <input
               className="py-4 pl-4 pr-2 focus:outline-none cursor-pointer w-full bg-transparent placeholder:text-textColor"
               type="search"
@@ -54,7 +54,7 @@ const Doctors = () => {
         <div className="container">
           {loading && (
             <div className="flex items-center justify-center w-full h-full">
-              <HashLoader color="#0067FF" />
+              <HashLoader color="#14b8a6" />
             </div>
           )}
 

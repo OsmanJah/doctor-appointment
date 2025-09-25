@@ -99,6 +99,7 @@ const Profile = ({ userData, refetchUserData }) => {
     <div>
       <form onSubmit={updateUserHandler}>
         <div className="mb-5">
+          <p className="form__label">Full Name*</p>
           <input
             type="text"
             name="name"
@@ -109,6 +110,7 @@ const Profile = ({ userData, refetchUserData }) => {
           />
         </div>
         <div className="mb-5">
+          <p className="form__label">Email</p>
           <input
             type="email"
             readOnly
@@ -121,17 +123,20 @@ const Profile = ({ userData, refetchUserData }) => {
         </div>
 
         <div className="mb-5">
+          <p className="form__label">New Password</p>
           <input
             type="password"
             value={newPassword}
             onChange={handleNewPasswordChange}
             name="newPassword"
+            autoComplete="new-password"
             placeholder="New Password (leave blank to keep current)"
             className="w-full pr-4 py-3 border-b border-solid border-primaryColor/40 focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor"
           />
         </div>
 
         <div className="mb-5">
+          <p className="form__label">Blood Group</p>
           <input
             type="text"
             value={formData.bloodType}
@@ -144,18 +149,18 @@ const Profile = ({ userData, refetchUserData }) => {
 
         <div className="mb-5 flex items-center justify-between">
           <label className="text-headingColor font-bold text-[16px] leading-7]">
-            Gender:
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleInputChange}
-              className="text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none"
-            >
-              <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
+            Gender
           </label>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleInputChange}
+            className="text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none border-b border-primaryColor/40"
+          >
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
         </div>
 
         <div className="mb-5 flex items-center gap-3">

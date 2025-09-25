@@ -64,7 +64,7 @@ const Header = () => {
       <div className="container">
         <div className="flex items-center justify-between">
           <Link to="/home">
-            <div className="text-5xl font-bold text-primaryColor hover:text-teal-700 transition-colors duration-300 cursor-pointer">
+            <div className="text-5xl font-extrabold bg-clip-text text-transparent bg-brand-diagonal cursor-pointer" style={{backgroundSize:'160% 160%'}}>
               MarieCare
             </div>
           </Link>
@@ -124,7 +124,7 @@ const Header = () => {
               </div>
             ) : (
               <Link to="/login">
-                <button className="bg-buttonBgColor py-2 px-6 rounded-[50px] text-white font-[600] h-[44px] flex items-center justify-center hover:bg-teal-700 transition-colors duration-300">
+                <button className="btn--outline h-[44px] mt-0">
                   Log In
                 </button>
               </Link>

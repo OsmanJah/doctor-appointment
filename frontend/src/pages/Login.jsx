@@ -59,7 +59,7 @@ const Login = () => {
 
   return (
     <section className="px-5 md:px-0">
-      <div className=" w-full max-w-[570px] mx-auto rounded-lg shadow-lg md:p-10">
+      <div className="w-full max-w-[570px] mx-auto rounded-2xl shadow-panelShadow bg-white/95 backdrop-blur-sm p-6 md:p-10 border border-slate-100">
         <div>
           <h3 className="text-headingColor text-[22px] leading-9 font-bold mb-10">
             Access Your Account
@@ -72,7 +72,7 @@ const Login = () => {
                 onChange={handleInputChange}
                 name="email"
                 placeholder="Enter Your Email"
-                className="w-full pr-4 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-[#0067FF] text-[16px] leading-7 text-headingColor placeholder:text-textColor"
+                className="w-full pr-4 py-3 border-b border-solid border-primaryColor/30 focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor"
                 required
               />
             </div>
@@ -84,7 +84,7 @@ const Login = () => {
                 onChange={handleInputChange}
                 name="password"
                 placeholder="Password"
-                className="w-full pr-4 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-[#0067FF] text-[16px] leading-7 text-headingColor placeholder:text-textColor"
+                className="w-full pr-4 py-3 border-b border-solid border-primaryColor/30 focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor"
                 required
               />
             </div>

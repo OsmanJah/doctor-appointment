@@ -28,10 +28,10 @@ const DoctorAnalytics = ({ appointments = [] }) => {
     <div>
       <h2 className="text-headingColor text-[24px] font-bold mb-6">Booking Analytics</h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Total" value={stats.total} bg="bg-gray-100" text="text-gray-700" />
-        <StatCard label="Upcoming" value={stats.upcoming} bg="bg-yellow-100" text="text-yellow-700" />
-        <StatCard label="Completed" value={stats.completed} bg="bg-green-100" text="text-green-700" />
-        <StatCard label="Cancelled" value={stats.cancelled} bg="bg-red-100" text="text-red-700" />
+        <StatCard label="Total" value={stats.total} bg="bg-slate-100" text="text-slate-700" />
+        <StatCard label="Upcoming" value={stats.upcoming} bg="bg-amber-100" text="text-amber-700" />
+        <StatCard label="Completed" value={stats.completed} bg="bg-sky-100" text="text-sky-700" />
+        <StatCard label="Cancelled" value={stats.cancelled} bg="bg-slate-200" text="text-slate-700" />
       </div>
     </div>
   );

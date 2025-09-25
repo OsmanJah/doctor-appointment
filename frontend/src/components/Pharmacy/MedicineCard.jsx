@@ -49,7 +49,7 @@ const MedicineCard = ({ medicine }) => {
           </span>
         </div>
         <button
-          className="w-full bg-primaryColor hover:bg-primaryDarkColor text-white text-[16px] leading-[24px] rounded-lg px-4 py-2.5 mt-auto transition-colors duration-200"
+          className="w-full bg-primaryColor hover:bg-primaryColorHover text-white text-[16px] leading-[24px] rounded-lg px-4 py-2.5 mt-auto transition-colors duration-200"
           onClick={handleAddToCart}
           disabled={isOutOfStock}
         >

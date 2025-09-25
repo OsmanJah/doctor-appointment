@@ -98,7 +98,7 @@ const CartPage = () => {
   return (
     <section>
       <div className="container">
-        <h2 className="heading text-center mb-8">Shopping Cart</h2>
+  <h2 className="heading heading--accent text-center mb-8">Shopping Cart</h2>
 
         {items.length === 0 ? (
           <p className="text-center text-textColor">Your cart is currently empty.</p>
@@ -114,7 +114,7 @@ const CartPage = () => {
                   <div className="flex items-center gap-3">
                     <button 
                       onClick={() => removeItem(item.medicineId || item._id)}
-                      className="px-2 py-1 border rounded text-red-600 hover:bg-red-50"
+                      className="px-2 py-1 border rounded text-slate-600 hover:bg-slate-50"
                       aria-label={`Decrease quantity of ${item.name}`}
                     >
                       -
@@ -122,7 +122,7 @@ const CartPage = () => {
                     <span>{item.quantity}</span>
                     <button 
                       onClick={() => addItem(item)} // Re-use addItem to increase quantity
-                      className="px-2 py-1 border rounded text-green-600 hover:bg-green-50"
+                      className="px-2 py-1 border rounded text-slate-600 hover:bg-slate-50"
                       aria-label={`Increase quantity of ${item.name}`}
                     >
                       +
@@ -141,7 +141,7 @@ const CartPage = () => {
             <div className="flex justify-end gap-4">
                <button 
                   onClick={clearCart}
-                  className="btn bg-red-600 hover:bg-red-700"
+                  className="btn--outline"
                 >
                   Clear Cart
                 </button>
